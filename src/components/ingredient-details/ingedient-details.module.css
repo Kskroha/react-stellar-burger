@@ -1,0 +1,11 @@
+.description {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+
+.image {
+  display: block;
+  margin-bottom: 8px;
+}
