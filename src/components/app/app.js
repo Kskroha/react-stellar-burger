@@ -57,7 +57,6 @@ function App() {
             <BurgerConstructor data={cart} total={total}/>
           </main>
         </div>
-        <div id="modal"></div>
       </div>
     </>
   );
