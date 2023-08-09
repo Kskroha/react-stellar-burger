@@ -6,8 +6,8 @@ function getData(onSuccess, onError, onFinally) {
   fetch(`${PATH}/ingredients`)
     .then((res) => checkResponse(res))
     .then((data) => onSuccess(data))
-    .catch((err) => onError())
-    .finally(() => onFinally());
+    .catch(() => onError)
+    .finally(() => onFinally);
 }
 
 export default getData;
