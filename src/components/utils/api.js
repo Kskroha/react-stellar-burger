@@ -7,7 +7,7 @@ function getData(onSuccess, onError, onFinally) {
     .then((res) => checkResponse(res))
     .then((data) => onSuccess(data))
     .catch((err) => onError())
-    .finally(() => onFinally);
+    .finally(() => onFinally());
 }
 
 export default getData;
