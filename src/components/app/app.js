@@ -16,7 +16,7 @@ function App() {
   React.useEffect(() => {
     setState({ ...state, hasError: false, isLoading: true });
 
-    const onSuccess = (data) => setState({ ...state, ingredientsData: data.data });
+    const onSuccess = (data) => setState({ ...state, hasError: false, ingredientsData: data.data });
 
     const onError = () => setState({ ...state, hasError: true });
 
