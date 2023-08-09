@@ -7,5 +7,11 @@
 
 .image {
   display: block;
+  margin: 0 auto;
   margin-bottom: 8px;
+}
+
+.title {
+  display: block;
+  text-align: center;
 }

@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  max-height: 625px;
+  max-height: 656px;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -35,5 +35,16 @@
   display: flex;
   gap: 40px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  transform: translateX(-15px);
+}
+
+.price {
+  display: flex;
+  align-items: center;
+}
+
+.price svg {
+  width: 36px;
+  height: 36px;
 }

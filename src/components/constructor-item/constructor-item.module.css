@@ -1,0 +1,11 @@
+.ingredient {
+  width: 568px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bun {
+  width: 568px;
+  padding-left: 32px;
+}

@@ -1,6 +1,13 @@
 .header {
+  background-color: #1C1C21;
+  width: 100%;
+}
+
+.container {
   display: flex;
   justify-content: space-between;
+  width: 66%;
+  margin: 0 auto;
 }
 
 .nav {
@@ -9,6 +16,7 @@
 
 .btn {
   background-color: transparent;
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,5 +25,27 @@
 
 .btn span {
   display: block;
+  color: #8585AD;
+}
+
+.active span {
   color: #f2f2f3;
+}
+
+.logo {
+  transform: translateX(-83px);
+  text-decoration: none;
+  display: block;
+}
+
+@media (max-width: 1919px) {
+  .container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1540px) {
+  .container {
+    width: 90%;
+  }
 }
