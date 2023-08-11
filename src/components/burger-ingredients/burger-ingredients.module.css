@@ -1,0 +1,72 @@
+.list {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 272px);
+  column-gap: 24px;
+  row-gap: 60px;
+  padding-left: 0;
+  justify-content: center;
+}
+
+.menu {
+  max-height: 756px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.menu::-webkit-scrollbar-track {
+  background-color: #2F2F37;
+  height: 664px;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.card {
+  position: relative;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+}
+
+.pricewrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.price {
+  display: block;
+}
+
+.icon {
+  display: block;
+}
+
+.link {
+  text-decoration: none;
+  color: #F2F2F3;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

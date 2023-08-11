@@ -1,0 +1,50 @@
+.constructor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-height: 656px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.constructor::-webkit-scrollbar {
+  width: 8px;
+}
+
+.constructor::-webkit-scrollbar-track {
+  background-color: #2F2F37;
+}
+
+.constructor::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.submit {
+  border: none;
+  border-radius: 64px;
+  box-shadow: 0px 4px 32px 0px rgba(51, 51, 255, 0.50), 0px 0px 8px 8px rgba(51, 51, 255, 0.25), 0px 0px 16px 8px rgba(51, 51, 255, 0.25);
+  background-color: transparent;
+  background: linear-gradient(45deg, #801AB2 0%, #4C4CFF 100%);
+  color: #F2F2F3;
+  cursor: pointer;
+}
+
+.total {
+  margin-left: auto;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: flex-end;
+  transform: translateX(-15px);
+}
+
+.price {
+  display: flex;
+  align-items: center;
+}
+
+.price svg {
+  width: 36px;
+  height: 36px;
+}

@@ -1,0 +1,35 @@
+.page {
+  height: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  overflow: hidden;
+}
+
+.container {
+  margin: 0 auto;
+  color: #f2f2f3;
+  display: grid;
+  grid-template-columns: 600px 600px;
+  gap: 40px;
+  justify-content: center;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  background-color: #131316;
+  overflow: hidden;
+  width: 66%;
+}
+
+@media (max-width: 1919px) {
+  .container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1540px) {
+  .container {
+    width: 90%;
+  }
+}
