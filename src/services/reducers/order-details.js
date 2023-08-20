@@ -33,7 +33,8 @@ export const orderDetailsReducer = (state = initialState, action) => {
       return {
         ...state,
         orderFailed: true,
-        orderRequest: false
+        orderRequest: false,
+        orderNumber: 0
       };
     }
     case CLOSE_MODAL: {
