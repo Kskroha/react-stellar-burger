@@ -1,8 +1,11 @@
 import classNames from "classnames";
+import { useSelector } from "react-redux";
 import OrderDetailsStyles from "./order-details.module.css";
 import confirmation from "../../images/confirmation.svg";
 
 function OrderDetails() {
+  const { orderNumber } = useSelector((state) => state.orderDetails);
+
   return (
     <div className={classNames(OrderDetailsStyles.content, "pt-20")}>
       <span
@@ -11,7 +14,7 @@ function OrderDetails() {
           "mb-8 text text_type_digits-large"
         )}
       >
-        034536
+        {orderNumber}
       </span>
       <span
         className={classNames(
@@ -21,7 +24,11 @@ function OrderDetails() {
       >
         идентификатор заказа
       </span>
-      <img className="mb-15" src={confirmation} alt="Галочка подтверждения"></img>
+      <img
+        className="mb-15"
+        src={confirmation}
+        alt="Галочка подтверждения"
+      ></img>
       <span
         className={classNames(
           OrderDetailsStyles.subtitle,
