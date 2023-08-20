@@ -110,7 +110,7 @@ ConstructorItem.propTypes = {
   item: PropTypes.object,
   text: PropTypes.string,
   type: PropTypes.string,
-  id: PropTypes.number,
+  id: PropTypes.string,
   index: PropTypes.number,
 };
 

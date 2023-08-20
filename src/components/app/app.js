@@ -22,6 +22,9 @@ function App() {
 
   React.useEffect(() => {
     dispatch(getIngredients());
+  }, [dispatch]);
+
+  React.useEffect(() => {
     dispatch({ type: COUNT_TOTAL });
   }, [dispatch, draggedItems, bun]);
 

@@ -30,10 +30,8 @@ function BurgerConstructor() {
     },
   });
 
-  const itemId = React.useId();
-
   const disabled = React.useMemo(() => {
-    return Object.keys(bun).length && draggedItems.length ? null : 'true';
+    return Object.keys(bun).length && draggedItems.length ? null : true;
   }, [bun, draggedItems]);
 
   const handleSubmit = (e) => {
@@ -75,7 +73,7 @@ function BurgerConstructor() {
                   item={item}
                   index={index}
                   id={item._id}
-                  key={itemId}
+                  key={item.uniqueId}
                 />
               ))}
           </div>
