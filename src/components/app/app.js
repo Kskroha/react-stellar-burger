@@ -6,7 +6,6 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
-import { COUNT_TOTAL } from "../../services/actions/burger-constructor";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 import appStyles from "./app.module.css";
 
@@ -15,18 +14,10 @@ function App() {
   const ingredients = useSelector(
     (state) => state.burgerIngredients.ingredients
   );
-  const draggedItems = useSelector(
-    (state) => state.burgerConstructor.draggedItems
-  );
-  const bun = useSelector((state) => state.burgerConstructor.bun);
 
   React.useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);
-
-  React.useEffect(() => {
-    dispatch({ type: COUNT_TOTAL });
-  }, [dispatch, draggedItems, bun]);
 
   return (
     <div className={appStyles.page}>

@@ -17,8 +17,18 @@ function BurgerConstructor() {
     (state) => state.burgerConstructor.draggedItems
   );
   const bun = useSelector((state) => state.burgerConstructor.bun);
-  const totalPrice = useSelector((state) => state.burgerConstructor.totalPrice);
   const isOpen = useSelector((state) => state.orderDetails.isOpen);
+
+  const countTotal = React.useMemo(() => {
+    const bunsPrice = bun.price * 2 || 0;
+    const itemsPrice =
+      draggedItems.reduce((acc, item) => {
+        let sum = 0;
+        sum = acc + item.price;
+        return sum;
+      }, 0) || 0;
+    return bunsPrice + itemsPrice;
+  }, [bun, draggedItems]);
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
@@ -84,7 +94,7 @@ function BurgerConstructor() {
         <div className={BurgerConstructorStyles.total}>
           <div className={BurgerConstructorStyles.price}>
             <span className="text text_type_digits-medium pr-2">
-              {totalPrice ? totalPrice : 0}
+              {countTotal}
             </span>
             <CurrencyIcon
               className={classNames(BurgerConstructorStyles.icon, "pr-10")}

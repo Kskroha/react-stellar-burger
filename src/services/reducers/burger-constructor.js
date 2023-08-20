@@ -1,15 +1,14 @@
 import {
 ADD_ITEM,
 REMOVE_ITEM,
-MOVE_ITEM,
-COUNT_TOTAL
+MOVE_ITEM
 } from '../actions/burger-constructor';
 import update from 'immutability-helper';
+import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   draggedItems: [],
-  bun: {},
-  totalPrice: 0
+  bun: {}
 };
 
 export const burgerConstructorReducer = (state = initialState, action) => {
@@ -25,7 +24,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
       }
       return {
         ...state,
-        draggedItems: [...state.draggedItems, {...action.item, uniqueId: `${ action.item.name }_${ new Date().getTime() }`}],
+        draggedItems: [...state.draggedItems, {...action.item, uniqueId: uuidv4()}],
       }
     }
     case REMOVE_ITEM: {
@@ -46,18 +45,6 @@ export const burgerConstructorReducer = (state = initialState, action) => {
             [action.hoverIndex, 0, state.draggedItems[action.dragIndex]],
           ],
         })
-      }
-    }
-    case COUNT_TOTAL: {
-      const itemsPrice = state.draggedItems.reduce((acc, item) => {
-        let sum = 0;
-        sum = acc + item.price;
-        return sum;
-      }, 0);
-      const bunsPrice = state.bun.price * 2;
-      return {
-        ...state,
-        totalPrice: itemsPrice + bunsPrice
       }
     }
     default: {
