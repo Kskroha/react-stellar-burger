@@ -8,8 +8,7 @@ import update from 'immutability-helper';
 
 const initialState = {
   draggedItems: [],
-  bun: {},
-  totalPrice: 0
+  bun: {}
 };
 
 export const burgerConstructorReducer = (state = initialState, action) => {

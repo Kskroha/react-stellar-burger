@@ -6,11 +6,8 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import BurgerConstructorStyles from "./burger-constructor.module.css";
-
 import { useDrop } from "react-dnd";
 import { sendOrder } from "../../services/actions/order-details";
-
-// import update from 'immutability-helper'
 import { ADD_ITEM } from "../../services/actions/burger-constructor";
 import { CLOSE_MODAL } from "../../services/actions/order-details";
 
@@ -34,23 +31,15 @@ function BurgerConstructor() {
   });
 
   const itemId = React.useId();
-  const buttonRef = React.useRef();
 
-  React.useEffect(() => {
-    if (Object.keys(bun).length && draggedItems.length) {
-      buttonRef.current.removeAttribute("disabled");
-    } else {
-      buttonRef.current.disabled = "true";
-    }
+  const disabled = React.useMemo(() => {
+    return Object.keys(bun).length && draggedItems.length ? null : 'true';
   }, [bun, draggedItems]);
 
-  const handleSubmit = React.useCallback(
-    (e) => {
-      e.preventDefault();
-      return dispatch(sendOrder([...draggedItems, bun]));
-    },
-    [dispatch, bun, draggedItems]
-  );
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    return dispatch(sendOrder([...draggedItems, bun]));
+  };
 
   const onClose = () => {
     dispatch({
@@ -107,7 +96,7 @@ function BurgerConstructor() {
             />
           </div>
           <button
-            ref={buttonRef}
+            disabled={disabled}
             className={classNames(
               BurgerConstructorStyles.submit,
               "pt-5 pb-5 pr-10 pl-10"

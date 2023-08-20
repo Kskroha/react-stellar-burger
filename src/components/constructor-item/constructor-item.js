@@ -99,7 +99,7 @@ function ConstructorItem({ item, text, type, id, index }) {
         type={item.type}
         isLocked={false}
         text={item.name}
-        price={item.totalPrice ? item.totalPrice : item.price}
+        price={item.price}
         thumbnail={item.image}
       />
     </div>
