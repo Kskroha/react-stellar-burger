@@ -1,9 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-height: 650px;
+}
+
 .constructor {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  max-height: 656px;
+  max-height: 400px;
+  gap: 16px;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -28,6 +34,10 @@
   background: linear-gradient(45deg, #801AB2 0%, #4C4CFF 100%);
   color: #F2F2F3;
   cursor: pointer;
+}
+
+.submit:disabled {
+  opacity: 0.5;
 }
 
 .total {

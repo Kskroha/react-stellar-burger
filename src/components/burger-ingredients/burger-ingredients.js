@@ -1,27 +1,37 @@
 import React from "react";
-import PropTypes from "prop-types";
-import BurgerIngredientsStyles from "./burger-ingredients.module.css";
-import {
-  Tab,
-  CurrencyIcon,
-  Counter,
-} from "@ya.praktikum/react-developer-burger-ui-components";
-import classNames from "classnames";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import IngredientElement from "../ingredient-element/ingredient-element";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from "prop-types";
+import classNames from "classnames";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  OPEN_MODAL,
+  CLOSE_MODAL,
+} from "../../services/actions/ingredient-details";
+import BurgerIngredientsStyles from "./burger-ingredients.module.css";
 
 function BurgerIngredients({ data }) {
-  const [current, setCurrent] = React.useState("one");
-  const [isOpen, setOpen] = React.useState(false);
-  const [currentIng, setCurrentIng] = React.useState({});
+  const [choice, setChoice] = React.useState("buns");
+  const dispatch = useDispatch();
 
-  const handleClick = (item) => {
-    setOpen(true);
-    setCurrentIng(item);
-  };
+  const currentPreview = useSelector(
+    (state) => state.ingredientDetails.currentPreview
+  );
+  const isOpen = useSelector((state) => state.ingredientDetails.isOpen);
+
+  const handleClick = React.useCallback(
+    (item) => {
+      return dispatch({ type: OPEN_MODAL, item });
+    },
+    [dispatch]
+  );
 
   const onClose = () => {
-    setOpen(false);
+    dispatch({
+      type: CLOSE_MODAL,
+    });
   };
 
   const buns = React.useMemo(
@@ -37,181 +47,118 @@ function BurgerIngredients({ data }) {
     [data]
   );
 
+  const pageRefs = React.useRef({});
+  const menuRef = React.useRef();
+
+  React.useEffect(() => {
+    menuRef.current.addEventListener("scroll", () => {
+      if (menuRef.current.scrollTop < 250) {
+        setChoice("buns");
+      }
+      if (menuRef.current.scrollTop > 250 &&  menuRef.current.scrollTop < 800) {
+        setChoice("sauces")
+      }
+      if (menuRef.current.scrollTop > 800) {
+        setChoice("main")
+      }
+    });
+  }, []);
+
+  const scrollIntoView = (type) => {
+    pageRefs.current[type].scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <section>
+    <section className={BurgerIngredientsStyles.section}>
       <h1 className="text text_type_main-large mb-5">Соберите бургер</h1>
       <div className="mb-10" style={{ display: "flex" }}>
-        <Tab value="one" active={current === "one"} onClick={setCurrent}>
-          <a className={BurgerIngredientsStyles.link} href="#buns">
-            Булки
-          </a>
+        <Tab
+          value="buns"
+          active={choice === "buns"}
+          onClick={() => {
+            setChoice("buns");
+            scrollIntoView("buns");
+          }}
+        >
+          Булки
         </Tab>
-        <Tab value="two" active={current === "two"} onClick={setCurrent}>
-          <a className={BurgerIngredientsStyles.link} href="#sauces">
-            Соусы
-          </a>
+        <Tab
+          value="sauces"
+          active={choice === "sauces"}
+          onClick={() => {
+            setChoice("sauces");
+            scrollIntoView("sauces");
+          }}
+        >
+          Соусы
         </Tab>
-        <Tab value="three" active={current === "three"} onClick={setCurrent}>
-          <a className={BurgerIngredientsStyles.link} href="#mains">
-            Начинки
-          </a>
+        <Tab
+          value="main"
+          active={choice === "main"}
+          onClick={() => {
+            setChoice("main");
+            scrollIntoView("main");
+          }}
+        >
+          Начинки
         </Tab>
       </div>
-      <div className={BurgerIngredientsStyles.menu}>
-        <h2 id="buns" className="text text_type_main-medium">
+      <div className={BurgerIngredientsStyles.menu} ref={menuRef}>
+        <h2
+          ref={(el) => (pageRefs.current = { ...pageRefs.current, buns: el })}
+          className="text text_type_main-medium"
+        >
           Булки
         </h2>
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {buns.length &&
             buns.map((item) => (
-              <li
-                className={BurgerIngredientsStyles.card}
-                onClick={() => handleClick(item)}
+              <IngredientElement
+                item={item}
+                handleClick={handleClick}
                 id={item._id}
                 key={item._id}
-              >
-                <img
-                  className={classNames(BurgerIngredientsStyles.image, "mb-2")}
-                  src={item.image}
-                  alt={item.name}
-                  width="240"
-                  height="120"
-                ></img>
-                <div
-                  className={classNames(
-                    BurgerIngredientsStyles.pricewrap,
-                    "mb-2"
-                  )}
-                >
-                  <span
-                    className={classNames(
-                      BurgerIngredientsStyles.price,
-                      "text text_type_digits-default"
-                    )}
-                  >
-                    {item.price}
-                  </span>
-                  <CurrencyIcon
-                    className={BurgerIngredientsStyles.icon}
-                    type="primary"
-                  />
-                </div>
-                <h3
-                  className={classNames(
-                    BurgerIngredientsStyles.title,
-                    "text text_type_main-default"
-                  )}
-                >
-                  {item.name}
-                </h3>
-                <Counter count={0} size="default" extraClass="m-1" />
-              </li>
+              />
             ))}
         </ul>
-        <h2 id="sauces" className="text text_type_main-medium">
+        <h2
+          ref={(el) => (pageRefs.current = { ...pageRefs.current, sauces: el })}
+          className="text text_type_main-medium"
+        >
           Соусы
         </h2>
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {sauces.length &&
             sauces.map((item) => (
-              <li
-                className={BurgerIngredientsStyles.card}
-                onClick={() => handleClick(item)}
+              <IngredientElement
+                item={item}
+                handleClick={handleClick}
                 id={item._id}
                 key={item._id}
-              >
-                <img
-                  className={classNames(BurgerIngredientsStyles.image, "mb-2")}
-                  src={item.image}
-                  alt={item.name}
-                  width="240"
-                  height="120"
-                ></img>
-                <div
-                  className={classNames(
-                    BurgerIngredientsStyles.pricewrap,
-                    "mb-2"
-                  )}
-                >
-                  <span
-                    className={classNames(
-                      BurgerIngredientsStyles.price,
-                      "text text_type_digits-default"
-                    )}
-                  >
-                    {item.price}
-                  </span>
-                  <CurrencyIcon
-                    className={BurgerIngredientsStyles.icon}
-                    type="primary"
-                  />
-                </div>
-                <h3
-                  className={classNames(
-                    BurgerIngredientsStyles.title,
-                    "text text_type_main-default"
-                  )}
-                >
-                  {item.name}
-                </h3>
-                <Counter count={0} size="default" extraClass="m-1" />
-              </li>
+              />
             ))}
         </ul>
-        <h2 id="mains" className="text text_type_main-medium">
+        <h2
+          className="text text_type_main-medium"
+          ref={(el) => (pageRefs.current = { ...pageRefs.current, main: el })}
+        >
           Начинки
         </h2>
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {mains.length &&
             mains.map((item) => (
-              <li
-                className={BurgerIngredientsStyles.card}
+              <IngredientElement
+                item={item}
+                handleClick={handleClick}
                 id={item._id}
-                onClick={() => handleClick(item)}
                 key={item._id}
-              >
-                <img
-                  className={classNames(BurgerIngredientsStyles.image, "mb-2")}
-                  src={item.image}
-                  alt={item.name}
-                  width="240"
-                  height="120"
-                ></img>
-                <div
-                  className={classNames(
-                    BurgerIngredientsStyles.pricewrap,
-                    "mb-2"
-                  )}
-                >
-                  <span
-                    className={classNames(
-                      BurgerIngredientsStyles.price,
-                      "text text_type_digits-default"
-                    )}
-                  >
-                    {item.price}
-                  </span>
-                  <CurrencyIcon
-                    className={BurgerIngredientsStyles.icon}
-                    type="primary"
-                  />
-                </div>
-                <h3
-                  className={classNames(
-                    BurgerIngredientsStyles.title,
-                    "text text_type_main-default"
-                  )}
-                >
-                  {item.name}
-                </h3>
-                <Counter count={0} size="default" extraClass="m-1" />
-              </li>
+              />
             ))}
         </ul>
       </div>
       {isOpen && (
         <Modal onClose={onClose} header="Детали ингредиента">
-          <IngredientDetails item={currentIng} />
+          <IngredientDetails item={currentPreview} />
         </Modal>
       )}
     </section>
