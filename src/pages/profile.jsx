@@ -28,17 +28,19 @@ export const ProfilePage = () => {
     }));
     setIsEdit(true);
   };
+  const onClick = (e) => {
+    e.preventDefault();
+    setIsEdit(false);
+    setFormValue({
+      name: user.name,
+      email: user.email,
+      password: "",
+    });
+  };
   const inputRef = React.useRef(null);
   const onIconClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
   };
-
-  const checkActive = ({ isActive }) =>
-    isActive
-      ? {
-          color: "#F2F2F3",
-        }
-      : { color: "#8585AD" };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -59,7 +61,11 @@ export const ProfilePage = () => {
             ProfilePageStyles.link,
             "text text_type_main-medium"
           )}
-          style={(isActive) => checkActive(isActive)}
+          style={({ isActive }) => {
+            return {
+              color: isActive ? "#f2f2f3" : "#8585AD",
+            };
+          }}
         >
           Профиль
         </NavLink>
@@ -69,7 +75,11 @@ export const ProfilePage = () => {
             ProfilePageStyles.link,
             "text text_type_main-medium"
           )}
-          style={(isActive) => checkActive(isActive)}
+          style={({ isActive }) => {
+            return {
+              color: isActive ? "#f2f2f3" : "#8585AD",
+            };
+          }}
         >
           История заказов
         </NavLink>
@@ -121,14 +131,25 @@ export const ProfilePage = () => {
             />
 
             {isEdit && (
-              <Button
-                htmlType="submit"
-                type="primary"
-                size="small"
-                extraClass={ProfilePageStyles.button}
-              >
-                Сохранить
-              </Button>
+              <div className={ProfilePageStyles.wrapper}>
+                <Button
+                  onClick={onClick}
+                  htmlType="reset"
+                  type="primary"
+                  size="small"
+                  extraClass={ProfilePageStyles.button}
+                >
+                  Отмена
+                </Button>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  size="small"
+                  extraClass={ProfilePageStyles.button}
+                >
+                  Сохранить
+                </Button>
+              </div>
             )}
           </form>
           <span

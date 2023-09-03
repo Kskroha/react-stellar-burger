@@ -23,15 +23,6 @@
   border: none;
 }
 
-.btn span {
-  display: block;
-  color: #8585AD;
-}
-
-.active span {
-  color: #f2f2f3;
-}
-
 .logo {
   transform: translateX(-83px);
   text-decoration: none;
