@@ -1,6 +1,4 @@
 import React from "react";
-import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
 import ConstructorItem from "../constructor-item/constructor-item";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames";
@@ -9,15 +7,19 @@ import BurgerConstructorStyles from "./burger-constructor.module.css";
 import { useDrop } from "react-dnd";
 import { sendOrder } from "../../services/actions/order-details";
 import { ADD_ITEM } from "../../services/actions/burger-constructor";
-import { CLOSE_MODAL } from "../../services/actions/order-details";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import { useNavigate } from "react-router-dom";
 
 function BurgerConstructor() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const draggedItems = useSelector(
     (state) => state.burgerConstructor.draggedItems
   );
   const bun = useSelector((state) => state.burgerConstructor.bun);
   const isOpen = useSelector((state) => state.orderDetails.isOpen);
+  const user = useSelector((state) => state.user.user);
 
   const countTotal = React.useMemo(() => {
     const bunsPrice = bun.price * 2 || 0;
@@ -46,13 +48,10 @@ function BurgerConstructor() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    return dispatch(sendOrder([...draggedItems, bun]));
-  };
-
-  const onClose = () => {
-    dispatch({
-      type: CLOSE_MODAL,
-    });
+    if (user) {
+      return dispatch(sendOrder([...draggedItems, bun]));
+    }
+    navigate("/login");
   };
 
   return (
@@ -80,10 +79,10 @@ function BurgerConstructor() {
             {draggedItems &&
               draggedItems.map((item, index) => (
                 <ConstructorItem
+                  key={item.uniqueId}
                   item={item}
                   index={index}
                   id={item._id}
-                  key={item.uniqueId}
                 />
               ))}
           </div>
@@ -116,7 +115,7 @@ function BurgerConstructor() {
         </div>
       </form>
       {isOpen && (
-        <Modal onClose={onClose}>
+        <Modal>
           <OrderDetails />
         </Modal>
       )}

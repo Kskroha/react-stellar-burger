@@ -7,6 +7,7 @@ import {
   ProfileIcon,
   Logo,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link } from "react-router-dom";
 
 function AppHeader() {
   return (
@@ -14,13 +15,13 @@ function AppHeader() {
       <header className={classNames(AppHeaderStyles.header, "pb-4 pt-4")}>
         <div className={AppHeaderStyles.container}>
           <nav className={AppHeaderStyles.nav}>
-            <a
-              href=".#"
+            <Link
+              to="/"
               className={classNames(AppHeaderStyles.btn, AppHeaderStyles.active, "pl-5 pr-5 pb-4 pt-4")}
             >
               <BurgerIcon type="primary" />
               <span className="text text_type_main-default pl-2">Конструктор</span>
-            </a>
+            </Link>
             <a
               href=".#"
               className={classNames(AppHeaderStyles.btn, "pl-5 pr-5 pb-4 pt-4")}
@@ -31,14 +32,14 @@ function AppHeader() {
               </span>
             </a>
           </nav>
-          <a className={AppHeaderStyles.logo} href=".#"><Logo width="290" height="40" /></a>
-          <a
-            href=".#"
+          <Link to="/" className={AppHeaderStyles.logo} href=".#"><Logo width="290" height="40" /></Link>
+          <Link
+            to="/profile"
             className={classNames(AppHeaderStyles.btn, "pl-5 pr-5 pb-4 pt-4")}
           >
             <ProfileIcon type="secondary" />
             <span className="text text_type_main-default pl-2">Личный кабинет</span>
-          </a>
+          </Link>
         </div>
       </header>
     </>

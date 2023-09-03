@@ -8,8 +8,10 @@ import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { useSelector } from "react-redux";
 import IngredientElementStyles from "./ingredient-element.module.css";
+import { Link, useLocation } from "react-router-dom";
 
-function IngredientElement({ item, handleClick }) {
+function IngredientElement({ item }) {
+  let location = useLocation();
   const { image, name, price } = item;
 
   const [, dragRef] = useDrag({
@@ -28,50 +30,58 @@ function IngredientElement({ item, handleClick }) {
   );
 
   return (
-    <li
-      ref={dragRef}
-      className={IngredientElementStyles.card}
-      onClick={() => handleClick(item)}
+    <Link
+      to={`/ingredients/${item._id}`}
+      state={{ background: location }}
+      className={IngredientElementStyles.link}
     >
-      <img
-        className={classNames(IngredientElementStyles.image, "mb-2")}
-        src={image}
-        alt={name}
-        width="240"
-        height="120"
-      ></img>
-      <div className={classNames(IngredientElementStyles.pricewrap, "mb-2")}>
-        <span
+      <li ref={dragRef} className={IngredientElementStyles.card} key={item._id}>
+        <img
+          className={classNames(IngredientElementStyles.image, "mb-2")}
+          src={image}
+          alt={name}
+          width="240"
+          height="120"
+        ></img>
+        <div className={classNames(IngredientElementStyles.pricewrap, "mb-2")}>
+          <span
+            className={classNames(
+              IngredientElementStyles.price,
+              "text text_type_digits-default"
+            )}
+          >
+            {price}
+          </span>
+          <CurrencyIcon
+            className={IngredientElementStyles.icon}
+            type="primary"
+          />
+        </div>
+        <h3
           className={classNames(
-            IngredientElementStyles.price,
-            "text text_type_digits-default"
+            IngredientElementStyles.title,
+            "text text_type_main-default"
           )}
         >
-          {price}
-        </span>
-        <CurrencyIcon className={IngredientElementStyles.icon} type="primary" />
-      </div>
-      <h3
-        className={classNames(
-          IngredientElementStyles.title,
-          "text text_type_main-default"
-        )}
-      >
-        {name}
-      </h3>
-      {item.type === "bun" && bun._id === item._id ? (
-        <Counter count={1} size="default" extraClass="m-1" />
-      ) : null}
-      {currentItems.length && item.type !== "bun" ? (
-        <Counter count={currentItems.length} size="default" extraClass="m-1" />
-      ) : null}
-    </li>
+          {name}
+        </h3>
+        {item.type === "bun" && bun._id === item._id ? (
+          <Counter count={1} size="default" extraClass="m-1" />
+        ) : null}
+        {currentItems.length && item.type !== "bun" ? (
+          <Counter
+            count={currentItems.length}
+            size="default"
+            extraClass="m-1"
+          />
+        ) : null}
+      </li>
+    </Link>
   );
 }
 
 IngredientElement.propTypes = {
   item: PropTypes.object.isRequired,
-  handleClick: PropTypes.func.isRequired
 };
 
 export default IngredientElement;

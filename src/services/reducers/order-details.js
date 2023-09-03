@@ -2,14 +2,14 @@ import {
   SEND_ORDER_REQUEST,
   SEND_ORDER_SUCCESS,
   SEND_ORDER_FAILED,
-  CLOSE_MODAL
-} from '../actions/order-details';
+  CLOSE_MODAL,
+} from "../actions/order-details";
 
 const initialState = {
   orderNumber: 0,
   orderRequest: false,
   orderFailed: false,
-  isOpen: false
+  isOpen: false,
 };
 
 export const orderDetailsReducer = (state = initialState, action) => {
@@ -26,13 +26,13 @@ export const orderDetailsReducer = (state = initialState, action) => {
         ...state,
         orderNumber: action.order.number,
         orderRequest: false,
-        isOpen: true
+        isOpen: true,
       };
     }
     case SEND_ORDER_FAILED: {
       return {
         ...initialState,
-        orderFailed: true
+        orderFailed: true,
       };
     }
     case CLOSE_MODAL: {
@@ -41,7 +41,7 @@ export const orderDetailsReducer = (state = initialState, action) => {
         isOpen: false,
         orderNumber: 0,
         orderRequest: false,
-        orderFailed: false
+        orderFailed: false,
       };
     }
     default: {

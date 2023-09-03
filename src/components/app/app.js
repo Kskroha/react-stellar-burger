@@ -1,36 +1,75 @@
 import React from "react";
 import AppHeader from "../app-header/app-header";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import classNames from "classnames";
-import { useDispatch, useSelector } from "react-redux";
-import { getIngredients } from "../../services/actions/burger-ingredients";
 import appStyles from "./app.module.css";
+import { Route, Routes, useLocation } from "react-router-dom";
+import {
+  HomePage,
+  LoginPage,
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+  NotFoundPage,
+} from "../../pages/index";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from "../modal/modal";
+import { useDispatch } from "react-redux";
+import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route";
+import { checkUserAuth } from "../../services/actions/user";
 
 function App() {
   const dispatch = useDispatch();
-  const ingredients = useSelector(
-    (state) => state.burgerIngredients.ingredients
-  );
 
   React.useEffect(() => {
-    dispatch(getIngredients());
+    dispatch(checkUserAuth());
   }, [dispatch]);
+  let location = useLocation();
+  let background = location.state && location.state.background;
 
   return (
     <div className={appStyles.page}>
       <AppHeader />
-      <main className={classNames(appStyles.main, "pl-5 pr-5 pt-10")}>
-        <DndProvider backend={HTML5Backend}>
-          <div className={appStyles.container}>
-            <BurgerIngredients data={ingredients} />
-            <BurgerConstructor />
-          </div>
-        </DndProvider>
-      </main>
-      <div id="modal"></div>
+      <Routes location={background || location}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/ingredients/:id" element={<IngredientDetails />} />
+        <Route
+          path="/login"
+          element={<OnlyUnAuth component={<LoginPage />} />}
+        />
+        <Route
+          path="/register"
+          element={<OnlyUnAuth component={<RegisterPage />} />}
+        />
+        <Route
+          path="/forgot-password"
+          element={<OnlyUnAuth component={<ForgotPasswordPage />} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<OnlyUnAuth component={<ResetPasswordPage />} />}
+        />
+        <Route
+          path="/profile"
+          element={<OnlyAuth component={<ProfilePage />} />}
+        >
+          <Route path="orders" />
+          <Route path="orders/:id" />
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+
+      {background && (
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 }

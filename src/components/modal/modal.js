@@ -5,10 +5,17 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalStyles from "./modal.module.css";
+import { useNavigate } from "react-router-dom";
+import { CLOSE_MODAL } from "../../services/actions/order-details";
+import { useDispatch, useSelector } from "react-redux";
 
 function Modal(props) {
   const modalRoot = document.getElementById("modal");
-  const { onClose, children, header } = props;
+  const { header, children } = props;
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isOpen = useSelector((state) => state.orderDetails.isOpen);
 
   React.useEffect(() => {
     const onKeydown = ({ key }) => {
@@ -20,6 +27,16 @@ function Modal(props) {
     document.addEventListener("keydown", onKeydown);
     return () => document.removeEventListener("keydown", onKeydown);
   });
+
+  const onClose = (e) => {
+    e.stopPropagation();
+    if (isOpen) {
+      return dispatch({
+        type: CLOSE_MODAL,
+      });
+    }
+    navigate("/");
+  };
 
   return createPortal(
     <>
@@ -46,7 +63,7 @@ function Modal(props) {
 }
 
 Modal.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
   children: PropTypes.element,
   header: PropTypes.string,
 };
