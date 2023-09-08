@@ -3,44 +3,6 @@ const PATH = "https://norma.nomoreparties.space/api";
 export const checkResponse = (res) =>
   res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 
-export async function getIngredientsRequest() {
-  return await fetch(`${PATH}/ingredients`);
-}
-
-export async function sendOrderRequest(items) {
-  return await fetch(`${PATH}/orders`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-    body: JSON.stringify({
-      ingredients: items.map((item) => item._id),
-    }),
-  });
-}
-
-export async function register(userData) {
-  return await fetch(`${PATH}/auth/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-    body: JSON.stringify(userData),
-  });
-}
-
-export const refreshToken = () => {
-  return fetch(`${PATH}/auth/token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-    body: JSON.stringify({
-      token: localStorage.getItem("refreshToken"),
-    }),
-  }).then(checkResponse);
-};
-
 const fetchWithRefresh = async (url, options) => {
   try {
     const res = await fetch(url, options);
@@ -62,6 +24,49 @@ const fetchWithRefresh = async (url, options) => {
   }
 };
 
+function request(url, options) {
+  const baseUrl = PATH;
+  return fetch(`${baseUrl}/${url}`, options).then(checkResponse)
+};
+
+export async function getIngredientsRequest() {
+  return await request("ingredients");
+}
+
+export async function sendOrderRequest(items) {
+  return await request("orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      ingredients: items.map((item) => item._id),
+    }),
+  });
+}
+
+export async function register(userData) {
+  return await request("auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify(userData),
+  });
+}
+
+export const refreshToken = () => {
+  return request("auth/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      token: localStorage.getItem("refreshToken"),
+    }),
+  });
+};
+
 export const getUserData = () => {
   return fetchWithRefresh(`${PATH}/auth/user`, {
     method: "GET",
@@ -73,7 +78,7 @@ export const getUserData = () => {
 };
 
 export const update = async (userData) => {
-  return await fetch(`${PATH}/auth/user`, {
+  return await request("auth/user", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -84,7 +89,7 @@ export const update = async (userData) => {
 };
 
 export const logout = async () => {
-  return await fetch(`${PATH}/auth/logout`, {
+  return await request("auth/logout", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -96,7 +101,7 @@ export const logout = async () => {
 };
 
 export const login = async (userData) => {
-  return await fetch(`${PATH}/auth/login`, {
+  return await request("auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -106,7 +111,7 @@ export const login = async (userData) => {
 };
 
 export const requestChange = async (userEmail) => {
-  return await fetch(`${PATH}/password-reset`, {
+  return await request("password-reset", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -116,7 +121,7 @@ export const requestChange = async (userEmail) => {
 };
 
 export const reset = async (userData) => {
-  return await fetch(`${PATH}/password-reset/reset`, {
+  return await request("password-reset/reset", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",

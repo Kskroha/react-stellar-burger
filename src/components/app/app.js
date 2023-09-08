@@ -16,15 +16,26 @@ import Modal from "../modal/modal";
 import { useDispatch } from "react-redux";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route";
 import { checkUserAuth } from "../../services/actions/user";
+import { getIngredients } from "../../services/actions/burger-ingredients";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    dispatch(getIngredients());
+  });
+
+  React.useEffect(() => {
     dispatch(checkUserAuth());
   }, [dispatch]);
-  let location = useLocation();
-  let background = location.state && location.state.background;
+  const location = useLocation();
+  const background = location.state && location.state.background;
+
+  const navigate = useNavigate();
+  const handleClose = () => {
+    navigate(-1);
+  };
 
   return (
     <div className={appStyles.page}>
@@ -63,7 +74,7 @@ function App() {
           <Route
             path="/ingredients/:id"
             element={
-              <Modal>
+              <Modal handleClose={handleClose}>
                 <IngredientDetails />
               </Modal>
             }

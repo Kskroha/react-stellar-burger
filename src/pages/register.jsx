@@ -8,12 +8,16 @@ import {
 import classNames from "classnames";
 import FormPageStyles from "./form.module.css";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerNewUser } from "../services/actions/user";
+import { useForm } from "../services/hooks/useForm";
+import getErrorMessage from "../services/errorMessage";
 
 export const RegisterPage = () => {
   const dispatch = useDispatch();
-  const [formValue, setFormValue] = React.useState({
+  const { requestFailed, errorMessage } = useSelector((state) => state.user);
+
+  const form = useForm({
     name: "",
     email: "",
     password: "",
@@ -21,15 +25,12 @@ export const RegisterPage = () => {
 
   const onChange = (e) => {
     e.preventDefault();
-    setFormValue((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    form.handleChange(e);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    return dispatch(registerNewUser(formValue));
+    return dispatch(registerNewUser(form.values));
   };
 
   return (
@@ -52,7 +53,7 @@ export const RegisterPage = () => {
           type={"text"}
           placeholder={"Имя"}
           onChange={onChange}
-          value={formValue.name}
+          value={form.values.name}
           name={"name"}
           error={false}
           errorText={"Ошибка"}
@@ -61,14 +62,14 @@ export const RegisterPage = () => {
         />
         <EmailInput
           onChange={onChange}
-          value={formValue.email}
+          value={form.values.email}
           name={"email"}
           isIcon={false}
           extraClass="mb-6"
         />
         <PasswordInput
           onChange={onChange}
-          value={formValue.password}
+          value={form.values.password}
           name={"password"}
           extraClass="mb-6"
         />
@@ -92,6 +93,7 @@ export const RegisterPage = () => {
           Войти
         </Link>
       </p>
+      {requestFailed && <span className="text text_type_main-default">{getErrorMessage(errorMessage)}</span>}
     </div>
   );
 };

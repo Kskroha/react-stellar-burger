@@ -1,20 +1,14 @@
 import React from "react";
 import classNames from "classnames";
 import IngredientDetailsStyles from "./ingedient-details.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getIngredients } from "../../services/actions/burger-ingredients";
 
 function IngredientDetails({ item }) {
   let { id } = useParams();
-  const dispatch = useDispatch();
   const ingredients = useSelector(
     (state) => state.burgerIngredients.ingredients
   );
-
-  React.useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
 
   const linkItem =
     ingredients.length && ingredients.find((item) => item._id === id);
@@ -22,6 +16,7 @@ function IngredientDetails({ item }) {
 
   return (
     <div className={IngredientDetailsStyles.content}>
+      <span className={classNames(IngredientDetailsStyles.header, "text text_type_main-large mb-1 ml-10")}>Детали ингредиента</span>
       <img
         className={IngredientDetailsStyles.image}
         src={linkItem.image_large}

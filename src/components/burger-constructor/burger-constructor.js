@@ -6,10 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import BurgerConstructorStyles from "./burger-constructor.module.css";
 import { useDrop } from "react-dnd";
 import { sendOrder } from "../../services/actions/order-details";
-import { ADD_ITEM } from "../../services/actions/burger-constructor";
+import {
+  ADD_ITEM,
+  CLEAN_CONSTRUCTOR,
+} from "../../services/actions/burger-constructor";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { PuffLoader } from "react-spinners";
 
 function BurgerConstructor() {
   const navigate = useNavigate();
@@ -18,8 +23,18 @@ function BurgerConstructor() {
     (state) => state.burgerConstructor.draggedItems
   );
   const bun = useSelector((state) => state.burgerConstructor.bun);
-  const isOpen = useSelector((state) => state.orderDetails.isOpen);
+  const { orderRequest, isOpen, orderNumber } = useSelector(
+    (state) => state.orderDetails
+  );
   const user = useSelector((state) => state.user.user);
+
+  React.useEffect(() => {
+    if (orderNumber !== 0) {
+      dispatch({
+        type: CLEAN_CONSTRUCTOR,
+      });
+    }
+  }, [orderNumber, dispatch]);
 
   const countTotal = React.useMemo(() => {
     const bunsPrice = bun.price * 2 || 0;
@@ -37,7 +52,10 @@ function BurgerConstructor() {
     drop(item) {
       dispatch({
         type: ADD_ITEM,
-        ...item,
+        payload: {
+          ...item,
+          uniqueId: uuidv4(),
+        },
       });
     },
   });
@@ -114,6 +132,9 @@ function BurgerConstructor() {
           </button>
         </div>
       </form>
+      {orderRequest && (
+        <div className={BurgerConstructorStyles.loader}><PuffLoader size={130} color="#ffffff" loading /></div>
+      )}
       {isOpen && (
         <Modal>
           <OrderDetails />

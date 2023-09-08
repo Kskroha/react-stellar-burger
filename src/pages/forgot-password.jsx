@@ -8,15 +8,16 @@ import FormPageStyles from "./form.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { requestPasswordChange } from "../services/actions/user";
+import { useForm } from "../services/hooks/useForm";
+import getErrorMessage from "../services/errorMessage";
 
 export const ForgotPasswordPage = () => {
+  const { requestFailed, errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [formValue, setFormValue] = React.useState({
+  const form = useForm({
     email: "",
   });
-  const requestSuccess = useSelector(
-    (state) => state.user.passwordChangeRequestSuccess
-  );
+  const { requestSuccess } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -27,15 +28,12 @@ export const ForgotPasswordPage = () => {
 
   const onChange = (e) => {
     e.preventDefault();
-    setFormValue((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    form.handleChange(e);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    return dispatch(requestPasswordChange(formValue));
+    return dispatch(requestPasswordChange(form.values));
   };
 
   return (
@@ -51,7 +49,7 @@ export const ForgotPasswordPage = () => {
       <form className={FormPageStyles.form} onSubmit={(e) => handleSubmit(e)}>
         <EmailInput
           onChange={onChange}
-          value={formValue.email}
+          value={form.values.email}
           name={"email"}
           isIcon={false}
           extraClass="mb-6"
@@ -77,6 +75,11 @@ export const ForgotPasswordPage = () => {
           Войти
         </Link>
       </p>
+      {requestFailed && (
+        <span className="text text_type_main-default">
+          {getErrorMessage(errorMessage)}
+        </span>
+      )}
     </div>
   );
 };

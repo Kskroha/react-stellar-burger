@@ -1,24 +1,27 @@
 import React from "react";
 import IngredientElement from "../ingredient-element/ingredient-element";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import classNames from "classnames";
 import BurgerIngredientsStyles from "./burger-ingredients.module.css";
+import { useSelector } from "react-redux";
 
-function BurgerIngredients({ data }) {
+function BurgerIngredients() {
   const [choice, setChoice] = React.useState("buns");
+  const ingredients = useSelector(
+    (state) => state.burgerIngredients.ingredients
+  );
 
   const buns = React.useMemo(
-    () => data.filter((item) => item.type === "bun"),
-    [data]
+    () => ingredients.filter((item) => item.type === "bun"),
+    [ingredients]
   );
   const sauces = React.useMemo(
-    () => data.filter((item) => item.type === "sauce"),
-    [data]
+    () => ingredients.filter((item) => item.type === "sauce"),
+    [ingredients]
   );
   const mains = React.useMemo(
-    () => data.filter((item) => item.type === "main"),
-    [data]
+    () => ingredients.filter((item) => item.type === "main"),
+    [ingredients]
   );
 
   const pageRefs = React.useRef({});
@@ -118,9 +121,5 @@ function BurgerIngredients({ data }) {
     </section>
   );
 }
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
 
 export default BurgerIngredients;

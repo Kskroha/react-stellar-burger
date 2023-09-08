@@ -9,29 +9,30 @@ import ProfilePageStyles from "./profile.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserInfo } from "../services/actions/user";
 import { userLogout } from "../services/actions/user";
+import { useForm } from "../services/hooks/useForm";
+import getErrorMessage from "../services/errorMessage";
 
 export const ProfilePage = () => {
+  const { requestFailed, errorMessage } = useSelector((state) => state.user);
   const outlet = useOutlet();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const [formValue, setFormValue] = React.useState({
+
+  const [isEdit, setIsEdit] = React.useState(false);
+  const form = useForm({
     name: user.name,
     email: user.email,
     password: "",
   });
-  const [isEdit, setIsEdit] = React.useState(false);
 
   const onChange = (e) => {
-    setFormValue((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    form.handleChange(e);
     setIsEdit(true);
   };
   const onClick = (e) => {
     e.preventDefault();
     setIsEdit(false);
-    setFormValue({
+    form.setValues({
       name: user.name,
       email: user.email,
       password: "",
@@ -44,7 +45,7 @@ export const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    return dispatch(updateUserInfo(formValue));
+    return dispatch(updateUserInfo(form));
   };
 
   const handleClick = (e) => {
@@ -101,7 +102,7 @@ export const ProfilePage = () => {
               type={"text"}
               placeholder={"Имя"}
               onChange={onChange}
-              value={formValue.name}
+              value={form.values.name}
               name={"name"}
               error={false}
               ref={inputRef}
@@ -116,7 +117,7 @@ export const ProfilePage = () => {
               placeholder={"E-mail"}
               onChange={onChange}
               icon="EditIcon"
-              value={formValue.email}
+              value={form.values.email}
               name={"email"}
               extraClass="mb-6"
             />
@@ -124,7 +125,7 @@ export const ProfilePage = () => {
               type={"password"}
               onChange={onChange}
               placeholder={"Пароль"}
-              value={formValue.password}
+              value={form.values.password}
               name={"password"}
               extraClass="mb-6"
               icon="EditIcon"
@@ -162,6 +163,7 @@ export const ProfilePage = () => {
           </span>
         </>
       )}
+      {requestFailed && <span className="text text_type_main-default">{getErrorMessage(errorMessage)}</span>}
     </div>
   );
 };

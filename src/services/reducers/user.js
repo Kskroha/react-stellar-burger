@@ -1,14 +1,20 @@
 import {
   SET_AUTH_CHECKED,
   SET_USER,
-  CHANGE_PASSWORD_REQUEST_SUCCESS,
+  REQUEST_CHANGE_SUCCESS,
   RESET_SUCCESS,
+  REQUEST_FAILED,
+  CLEAN_STATE
 } from "../actions/user";
 
 const initialState = {
   user: null,
+  isLoading: false,
   isAuthChecked: false,
-  passwordChangeRequestSuccess: false,
+  requestSuccess: false,
+  requestFailed: false,
+  resetSucces: false,
+  errorMessage: "",
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -23,15 +29,29 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         user: action.payload,
       };
-    case CHANGE_PASSWORD_REQUEST_SUCCESS:
+    case REQUEST_CHANGE_SUCCESS:
       return {
         ...state,
-        passwordChangeRequestSuccess: true,
+        requestSuccess: true,
       };
     case RESET_SUCCESS:
       return {
         ...state,
-        passwordChangeRequestSuccess: false,
+        resetSuccess: true,
+        requestSuccess: false,
+      };
+    case REQUEST_FAILED:
+      return {
+        ...state,
+        resetSuccess: false,
+        requestFailed: true,
+        errorMessage: action.payload
+      };
+    case CLEAN_STATE:
+      return {
+        ...state,
+        requestFailed: false,
+        errorMessage: ""
       };
     default:
       return state;

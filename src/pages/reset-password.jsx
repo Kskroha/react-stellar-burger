@@ -8,35 +8,36 @@ import FormPageStyles from "./form.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../services/actions/user";
+import { useForm } from "../services/hooks/useForm";
+import getErrorMessage from "../services/errorMessage";
 
 export const ResetPasswordPage = () => {
-  const requestSuccess = useSelector(
-    (state) => state.user.passwordChangeRequestSuccess
+  const { requestFailed, errorMessage } = useSelector((state) => state.user);
+  const {resetSuccess} = useSelector(
+    (state) => state.user
   );
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (!requestSuccess) {
+    if (resetSuccess) {
       navigate("/");
     }
-  }, [requestSuccess, navigate]);
+  }, [resetSuccess, navigate]);
   const dispatch = useDispatch();
-  const [formValue, setFormValue] = React.useState({
+
+  const form = useForm({
     password: "",
     token: "",
   });
 
   const onChange = (e) => {
     e.preventDefault();
-    setFormValue((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    form.handleChange(e);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    return dispatch(resetPassword(formValue));
+    return dispatch(resetPassword(form.values));
   };
 
   const inputRef = React.useRef(null);
@@ -60,7 +61,7 @@ export const ResetPasswordPage = () => {
           type={"password"}
           placeholder={"Введите новый пароль"}
           onChange={onChange}
-          value={formValue.password}
+          value={form.values.password}
           name={"password"}
           error={false}
           ref={inputRef}
@@ -73,7 +74,7 @@ export const ResetPasswordPage = () => {
           type={"password"}
           onChange={onChange}
           placeholder={"Введите код из письма"}
-          value={formValue.token}
+          value={form.values.token}
           name={"token"}
           error={false}
           ref={inputRef}
@@ -102,6 +103,7 @@ export const ResetPasswordPage = () => {
           Войти
         </Link>
       </p>
+      {requestFailed && <span className="text text_type_main-default">{getErrorMessage(errorMessage)}</span>}
     </div>
   );
 };

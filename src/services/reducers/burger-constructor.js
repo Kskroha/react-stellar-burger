@@ -2,9 +2,9 @@ import {
   ADD_ITEM,
   REMOVE_ITEM,
   MOVE_ITEM,
+  CLEAN_CONSTRUCTOR
 } from "../actions/burger-constructor";
 import update from "immutability-helper";
-import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   draggedItems: [],
@@ -14,21 +14,21 @@ const initialState = {
 export const burgerConstructorReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ITEM: {
-      if (action.item.type === "bun") {
+      if (action.payload.item.type === "bun") {
         return {
           ...state,
           bun: state.bun
-            ? state.bun._id === action.item._id
+            ? state.bun._id === action.payload.item._id
               ? state.bun
-              : action.item
-            : [...state.bun, action.item],
+              : action.payload.item
+            : [...state.bun, action.payload.item],
         };
       }
       return {
         ...state,
         draggedItems: [
           ...state.draggedItems,
-          { ...action.item, uniqueId: uuidv4() },
+          { ...action.payload.item, uniqueId: action.payload.uniqueId },
         ],
       };
     }
@@ -50,6 +50,11 @@ export const burgerConstructorReducer = (state = initialState, action) => {
             [action.hoverIndex, 0, state.draggedItems[action.dragIndex]],
           ],
         }),
+      };
+    }
+    case CLEAN_CONSTRUCTOR: {
+      return {
+        ...initialState,
       };
     }
     default: {

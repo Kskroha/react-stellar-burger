@@ -1,4 +1,4 @@
-import { checkResponse, sendOrderRequest } from "../api";
+import { sendOrderRequest } from "../api";
 
 export const SEND_ORDER_REQUEST = "SEND_ORDER_REQUEST";
 export const SEND_ORDER_FAILED = "SEND_ORDER_FAILED";
@@ -10,7 +10,6 @@ export const sendOrder = (items) => (dispatch) => {
     type: SEND_ORDER_REQUEST,
   });
   sendOrderRequest(items)
-    .then((res) => checkResponse(res))
     .then((res) =>
       dispatch({
         type: SEND_ORDER_SUCCESS,
