@@ -1,3 +1,17 @@
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  width: 640px;
+  height: fit-content;
+  transform: translate(-50%, -50%);
+}
+
 .description {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -14,4 +28,10 @@
 .title {
   display: block;
   text-align: center;
+}
+
+.header {
+  color: #F2F2F3;
+  display: block;
+  margin-right: auto;
 }

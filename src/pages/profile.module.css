@@ -1,0 +1,33 @@
+.container {
+  display: grid;
+  grid-template-columns: 320px 320px;
+  column-gap: 60px;
+  align-self: center;
+  margin-top: 120px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  text-decoration: none;
+  display: block;
+  color: #8585AD;
+  padding: 16px 0;
+}
+
+.span {
+  color: #8585AD;
+  max-width: 320px;
+}
+
+.button {
+  width: 200px;
+}
+
+.wrapper {
+  display: flex;
+  gap: 20px;
+}

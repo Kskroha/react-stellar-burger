@@ -1,6 +1,4 @@
 import React from "react";
-import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
 import ConstructorItem from "../constructor-item/constructor-item";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames";
@@ -8,16 +6,35 @@ import { useDispatch, useSelector } from "react-redux";
 import BurgerConstructorStyles from "./burger-constructor.module.css";
 import { useDrop } from "react-dnd";
 import { sendOrder } from "../../services/actions/order-details";
-import { ADD_ITEM } from "../../services/actions/burger-constructor";
-import { CLOSE_MODAL } from "../../services/actions/order-details";
+import {
+  ADD_ITEM,
+  CLEAN_CONSTRUCTOR,
+} from "../../services/actions/burger-constructor";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { PuffLoader } from "react-spinners";
 
 function BurgerConstructor() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const draggedItems = useSelector(
     (state) => state.burgerConstructor.draggedItems
   );
   const bun = useSelector((state) => state.burgerConstructor.bun);
-  const isOpen = useSelector((state) => state.orderDetails.isOpen);
+  const { orderRequest, isOpen, orderNumber } = useSelector(
+    (state) => state.orderDetails
+  );
+  const user = useSelector((state) => state.user.user);
+
+  React.useEffect(() => {
+    if (orderNumber !== 0) {
+      dispatch({
+        type: CLEAN_CONSTRUCTOR,
+      });
+    }
+  }, [orderNumber, dispatch]);
 
   const countTotal = React.useMemo(() => {
     const bunsPrice = bun.price * 2 || 0;
@@ -35,7 +52,10 @@ function BurgerConstructor() {
     drop(item) {
       dispatch({
         type: ADD_ITEM,
-        ...item,
+        payload: {
+          ...item,
+          uniqueId: uuidv4(),
+        },
       });
     },
   });
@@ -46,13 +66,10 @@ function BurgerConstructor() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    return dispatch(sendOrder([...draggedItems, bun]));
-  };
-
-  const onClose = () => {
-    dispatch({
-      type: CLOSE_MODAL,
-    });
+    if (user) {
+      return dispatch(sendOrder([...draggedItems, bun]));
+    }
+    navigate("/login");
   };
 
   return (
@@ -80,10 +97,10 @@ function BurgerConstructor() {
             {draggedItems &&
               draggedItems.map((item, index) => (
                 <ConstructorItem
+                  key={item.uniqueId}
                   item={item}
                   index={index}
                   id={item._id}
-                  key={item.uniqueId}
                 />
               ))}
           </div>
@@ -115,8 +132,11 @@ function BurgerConstructor() {
           </button>
         </div>
       </form>
+      {orderRequest && (
+        <div className={BurgerConstructorStyles.loader}><PuffLoader size={130} color="#ffffff" loading /></div>
+      )}
       {isOpen && (
-        <Modal onClose={onClose}>
+        <Modal>
           <OrderDetails />
         </Modal>
       )}

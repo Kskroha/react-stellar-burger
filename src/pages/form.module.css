@@ -1,0 +1,28 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 8px;
+  color: #4C4CFF;
+  cursor: pointer;
+}
+
+.link:hover {
+  opacity: 0.8;
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: translate(-50%, -50%);
+}

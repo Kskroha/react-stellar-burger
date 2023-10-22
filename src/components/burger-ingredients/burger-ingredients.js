@@ -1,50 +1,27 @@
 import React from "react";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import IngredientElement from "../ingredient-element/ingredient-element";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import classNames from "classnames";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  OPEN_MODAL,
-  CLOSE_MODAL,
-} from "../../services/actions/ingredient-details";
 import BurgerIngredientsStyles from "./burger-ingredients.module.css";
+import { useSelector } from "react-redux";
 
-function BurgerIngredients({ data }) {
+function BurgerIngredients() {
   const [choice, setChoice] = React.useState("buns");
-  const dispatch = useDispatch();
-
-  const currentPreview = useSelector(
-    (state) => state.ingredientDetails.currentPreview
+  const ingredients = useSelector(
+    (state) => state.burgerIngredients.ingredients
   );
-  const isOpen = useSelector((state) => state.ingredientDetails.isOpen);
-
-  const handleClick = React.useCallback(
-    (item) => {
-      return dispatch({ type: OPEN_MODAL, item });
-    },
-    [dispatch]
-  );
-
-  const onClose = () => {
-    dispatch({
-      type: CLOSE_MODAL,
-    });
-  };
 
   const buns = React.useMemo(
-    () => data.filter((item) => item.type === "bun"),
-    [data]
+    () => ingredients.filter((item) => item.type === "bun"),
+    [ingredients]
   );
   const sauces = React.useMemo(
-    () => data.filter((item) => item.type === "sauce"),
-    [data]
+    () => ingredients.filter((item) => item.type === "sauce"),
+    [ingredients]
   );
   const mains = React.useMemo(
-    () => data.filter((item) => item.type === "main"),
-    [data]
+    () => ingredients.filter((item) => item.type === "main"),
+    [ingredients]
   );
 
   const pageRefs = React.useRef({});
@@ -55,11 +32,11 @@ function BurgerIngredients({ data }) {
       if (menuRef.current.scrollTop < 250) {
         setChoice("buns");
       }
-      if (menuRef.current.scrollTop > 250 &&  menuRef.current.scrollTop < 800) {
-        setChoice("sauces")
+      if (menuRef.current.scrollTop > 250 && menuRef.current.scrollTop < 800) {
+        setChoice("sauces");
       }
       if (menuRef.current.scrollTop > 800) {
-        setChoice("main")
+        setChoice("main");
       }
     });
   }, []);
@@ -113,12 +90,7 @@ function BurgerIngredients({ data }) {
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {buns.length &&
             buns.map((item) => (
-              <IngredientElement
-                item={item}
-                handleClick={handleClick}
-                id={item._id}
-                key={item._id}
-              />
+              <IngredientElement item={item} key={item._id} />
             ))}
         </ul>
         <h2
@@ -130,12 +102,7 @@ function BurgerIngredients({ data }) {
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {sauces.length &&
             sauces.map((item) => (
-              <IngredientElement
-                item={item}
-                handleClick={handleClick}
-                id={item._id}
-                key={item._id}
-              />
+              <IngredientElement item={item} id={item._id} key={item._id} />
             ))}
         </ul>
         <h2
@@ -147,26 +114,12 @@ function BurgerIngredients({ data }) {
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {mains.length &&
             mains.map((item) => (
-              <IngredientElement
-                item={item}
-                handleClick={handleClick}
-                id={item._id}
-                key={item._id}
-              />
+              <IngredientElement item={item} id={item._id} key={item._id} />
             ))}
         </ul>
       </div>
-      {isOpen && (
-        <Modal onClose={onClose} header="Детали ингредиента">
-          <IngredientDetails item={currentPreview} />
-        </Modal>
-      )}
     </section>
   );
 }
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
 
 export default BurgerIngredients;

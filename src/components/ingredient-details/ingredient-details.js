@@ -1,13 +1,25 @@
+import React from "react";
 import classNames from "classnames";
-import PropTypes from "prop-types";
 import IngredientDetailsStyles from "./ingedient-details.module.css";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 function IngredientDetails({ item }) {
+  let { id } = useParams();
+  const ingredients = useSelector(
+    (state) => state.burgerIngredients.ingredients
+  );
+
+  const linkItem =
+    ingredients.length && ingredients.find((item) => item._id === id);
+  const ingredient = item ? item : linkItem;
+
   return (
     <div className={IngredientDetailsStyles.content}>
+      <span className={classNames(IngredientDetailsStyles.header, "text text_type_main-large mb-1 ml-10")}>Детали ингредиента</span>
       <img
         className={IngredientDetailsStyles.image}
-        src={item.image_large}
+        src={linkItem.image_large}
         alt="Картинка ингредиента"
       ></img>
       <span
@@ -16,7 +28,7 @@ function IngredientDetails({ item }) {
           "text text_type_main-medium mb-8"
         )}
       >
-        {item.name}
+        {ingredient.name}
       </span>
       <dl
         className={classNames(
@@ -29,7 +41,7 @@ function IngredientDetails({ item }) {
             Калории,ккал
           </dt>
           <dd className="text text_type_digits-default text_color_inactive">
-            {item.calories}
+            {ingredient.calories}
           </dd>
         </div>
         <div>
@@ -37,7 +49,7 @@ function IngredientDetails({ item }) {
             Белки, г
           </dt>
           <dd className="text text_type_digits-default text_color_inactive">
-            {item.proteins}
+            {ingredient.proteins}
           </dd>
         </div>
         <div>
@@ -45,7 +57,7 @@ function IngredientDetails({ item }) {
             Жиры, г
           </dt>
           <dd className="text text_type_digits-default text_color_inactive">
-            {item.fat}
+            {ingredient.fat}
           </dd>
         </div>
         <div>
@@ -53,16 +65,12 @@ function IngredientDetails({ item }) {
             Углеводы, г
           </dt>
           <dd className="text text_type_digits-default text_color_inactive">
-            {item.carbohydrates}
+            {ingredient.carbohydrates}
           </dd>
         </div>
       </dl>
     </div>
   );
 }
-
-IngredientDetails.propTypes = {
-  item: PropTypes.object.isRequired,
-};
 
 export default IngredientDetails;

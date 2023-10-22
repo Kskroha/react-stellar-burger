@@ -2,7 +2,7 @@ import {
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_SUCCESS,
-} from '../actions/burger-ingredients';
+} from "../actions/burger-ingredients";
 
 const initialState = {
   ingredients: [],
@@ -23,14 +23,14 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
       return {
         ...state,
         ingredients: action.items,
-        ingredientsRequest: false
+        ingredientsRequest: false,
       };
     }
     case GET_INGREDIENTS_FAILED: {
       return {
         ...state,
         ingredientsFailed: true,
-        ingredientsRequest: false
+        ingredientsRequest: false,
       };
     }
     default: {
