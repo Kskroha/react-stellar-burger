@@ -11,12 +11,14 @@ import { updateUserInfo } from "../services/actions/user";
 import { userLogout } from "../services/actions/user";
 import { useForm } from "../services/hooks/useForm";
 import getErrorMessage from "../services/errorMessage";
+import { AppDispatch } from "..";
+import { RootState } from "../services/reducers";
 
 export const ProfilePage = () => {
-  const { requestFailed, errorMessage } = useSelector((state) => state.user);
+  const { requestFailed, errorMessage } = useSelector((state: RootState) => state.user);
   const outlet = useOutlet();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
 
   const [isEdit, setIsEdit] = React.useState(false);
   const form = useForm({
@@ -25,12 +27,13 @@ export const ProfilePage = () => {
     password: "",
   });
 
-  const onChange = (e) => {
+  const { values } = form;
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     form.handleChange(e);
     setIsEdit(true);
   };
-  const onClick = (e) => {
-    e.preventDefault();
+  const onClick = () => {
     setIsEdit(false);
     form.setValues({
       name: user.name,
@@ -38,17 +41,17 @@ export const ProfilePage = () => {
       password: "",
     });
   };
-  const inputRef = React.useRef(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
+    setTimeout(() => inputRef.current?.focus(), 0);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    return dispatch(updateUserInfo(form));
+    return dispatch(updateUserInfo(values));
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     return dispatch(userLogout());
   };
@@ -102,7 +105,7 @@ export const ProfilePage = () => {
               type={"text"}
               placeholder={"Имя"}
               onChange={onChange}
-              value={form.values.name}
+              value={values.name || ''}
               name={"name"}
               error={false}
               ref={inputRef}
@@ -117,7 +120,7 @@ export const ProfilePage = () => {
               placeholder={"E-mail"}
               onChange={onChange}
               icon="EditIcon"
-              value={form.values.email}
+              value={values.email || ''}
               name={"email"}
               extraClass="mb-6"
             />
@@ -125,7 +128,7 @@ export const ProfilePage = () => {
               type={"password"}
               onChange={onChange}
               placeholder={"Пароль"}
-              value={form.values.password}
+              value={values.password || ''}
               name={"password"}
               extraClass="mb-6"
               icon="EditIcon"

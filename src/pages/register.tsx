@@ -12,10 +12,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerNewUser } from "../services/actions/user";
 import { useForm } from "../services/hooks/useForm";
 import getErrorMessage from "../services/errorMessage";
+import { RootState } from "../services/reducers";
+import { AppDispatch } from "..";
 
 export const RegisterPage = () => {
-  const dispatch = useDispatch();
-  const { requestFailed, errorMessage } = useSelector((state) => state.user);
+  const dispatch: AppDispatch = useDispatch();
+  const { requestFailed, errorMessage } = useSelector((state: RootState) => state.user);
 
   const form = useForm({
     name: "",
@@ -23,14 +25,16 @@ export const RegisterPage = () => {
     password: "",
   });
 
-  const onChange = (e) => {
+  const { values } = form;
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     form.handleChange(e);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    return dispatch(registerNewUser(form.values));
+    return dispatch(registerNewUser(values));
   };
 
   return (
@@ -53,7 +57,7 @@ export const RegisterPage = () => {
           type={"text"}
           placeholder={"Имя"}
           onChange={onChange}
-          value={form.values.name}
+          value={values.name || ''}
           name={"name"}
           error={false}
           errorText={"Ошибка"}
@@ -62,14 +66,14 @@ export const RegisterPage = () => {
         />
         <EmailInput
           onChange={onChange}
-          value={form.values.email}
+          value={values.email || ''}
           name={"email"}
           isIcon={false}
           extraClass="mb-6"
         />
         <PasswordInput
           onChange={onChange}
-          value={form.values.password}
+          value={values.password || ''}
           name={"password"}
           extraClass="mb-6"
         />

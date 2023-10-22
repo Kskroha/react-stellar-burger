@@ -1,18 +1,24 @@
-import React from "react";
+import { FC } from 'react';
 import classNames from "classnames";
 import IngredientDetailsStyles from "./ingedient-details.module.css";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { RootState } from "../../services/reducers";
+import { TIngredient } from "../../types/types";
 
-function IngredientDetails({ item }) {
+interface IIngredientDetails {
+  item?: TIngredient;
+}
+
+const IngredientDetails: FC<IIngredientDetails> = ({ item }) => {
   let { id } = useParams();
-  const ingredients = useSelector(
-    (state) => state.burgerIngredients.ingredients
+  const ingredients: any = useSelector(
+    (state: RootState) => state.burgerIngredients
   );
 
   const linkItem =
-    ingredients.length && ingredients.find((item) => item._id === id);
-  const ingredient = item ? item : linkItem;
+    ingredients.length && ingredients.find((item: { _id: string | undefined; }) => item._id === id);
+  const ingredient = item ?? linkItem;
 
   return (
     <div className={IngredientDetailsStyles.content}>

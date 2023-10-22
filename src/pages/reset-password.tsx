@@ -10,11 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../services/actions/user";
 import { useForm } from "../services/hooks/useForm";
 import getErrorMessage from "../services/errorMessage";
+import { RootState } from "../services/reducers";
+import { AppDispatch } from "..";
 
 export const ResetPasswordPage = () => {
-  const { requestFailed, errorMessage } = useSelector((state) => state.user);
-  const {resetSuccess} = useSelector(
-    (state) => state.user
+  const { requestFailed, errorMessage } = useSelector((state: RootState) => state.user);
+  const resetSuccess = useSelector(
+    (state: RootState) => state.user
   );
   const navigate = useNavigate();
 
@@ -23,26 +25,28 @@ export const ResetPasswordPage = () => {
       navigate("/");
     }
   }, [resetSuccess, navigate]);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const form = useForm({
     password: "",
     token: "",
   });
 
-  const onChange = (e) => {
+  const { values } = form;
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     form.handleChange(e);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    return dispatch(resetPassword(form.values));
+    return dispatch(resetPassword(values));
   };
 
-  const inputRef = React.useRef(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
+    setTimeout(() => inputRef.current?.focus(), 0);
     alert("Icon Click Callback");
   };
 
@@ -61,7 +65,7 @@ export const ResetPasswordPage = () => {
           type={"password"}
           placeholder={"Введите новый пароль"}
           onChange={onChange}
-          value={form.values.password}
+          value={values.password || ''}
           name={"password"}
           error={false}
           ref={inputRef}
@@ -74,7 +78,7 @@ export const ResetPasswordPage = () => {
           type={"password"}
           onChange={onChange}
           placeholder={"Введите код из письма"}
-          value={form.values.token}
+          value={values.token || ''}
           name={"token"}
           error={false}
           ref={inputRef}

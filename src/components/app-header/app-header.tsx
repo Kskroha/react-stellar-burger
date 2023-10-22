@@ -42,7 +42,7 @@ function AppHeader() {
               </span>
             </NavLink>
           </nav>
-          <Link to="/" className={AppHeaderStyles.logo} href=".#"><Logo width="290" height="40" /></Link>
+          <Link to="/" className={AppHeaderStyles.logo}><Logo /></Link>
           <NavLink
             to="/profile"
             className={classNames(AppHeaderStyles.btn, "pl-5 pr-5 pb-4 pt-4")}

@@ -18,9 +18,10 @@ import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route";
 import { checkUserAuth } from "../../services/actions/user";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "../..";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   React.useEffect(() => {
     dispatch(getIngredients());

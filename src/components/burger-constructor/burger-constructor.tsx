@@ -15,18 +15,21 @@ import OrderDetails from "../order-details/order-details";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { PuffLoader } from "react-spinners";
+import { RootState } from "../../services/reducers";
+import { AppDispatch } from "../..";
+import { TIngredient } from "../../types/types";
 
 function BurgerConstructor() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const draggedItems = useSelector(
-    (state) => state.burgerConstructor.draggedItems
+  const dispatch: AppDispatch = useDispatch();
+  const draggedItems: any[] = useSelector(
+    (state: RootState) => state.burgerConstructor
   );
-  const bun = useSelector((state) => state.burgerConstructor.bun);
+  const bun: TIngredient = useSelector((state: RootState) => state.burgerConstructor);
   const { orderRequest, isOpen, orderNumber } = useSelector(
-    (state) => state.orderDetails
+    (state: RootState) => state.orderDetails
   );
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state: RootState) => state.user.user);
 
   React.useEffect(() => {
     if (orderNumber !== 0) {
@@ -39,17 +42,17 @@ function BurgerConstructor() {
   const countTotal = React.useMemo(() => {
     const bunsPrice = bun.price * 2 || 0;
     const itemsPrice =
-      draggedItems.reduce((acc, item) => {
+      draggedItems.reduce((acc: any, item: { price: any; }) => {
         let sum = 0;
         sum = acc + item.price;
         return sum;
       }, 0) || 0;
-    return bunsPrice + itemsPrice;
+    return bunsPrice ?? 0 + itemsPrice ?? 0;
   }, [bun, draggedItems]);
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
-    drop(item) {
+    drop(item: any) {
       dispatch({
         type: ADD_ITEM,
         payload: {
@@ -64,7 +67,7 @@ function BurgerConstructor() {
     return Object.keys(bun).length && draggedItems.length ? null : true;
   }, [bun, draggedItems]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (user) {
       return dispatch(sendOrder([...draggedItems, bun]));
@@ -89,19 +92,15 @@ function BurgerConstructor() {
             </p>
           )}
           <div
-            className={classNames(
-              BurgerConstructorStyles.constructor,
-              "mt-4 mb-4"
-            )}
+            className={BurgerConstructorStyles.constructor as unknown as string}
           >
             {draggedItems &&
-              draggedItems.map((item, index) => (
+              draggedItems.map((item: any, index: number) => (
                 <ConstructorItem
                   key={item.uniqueId}
                   item={item}
                   index={index}
-                  id={item._id}
-                />
+                  id={item._id}               />
               ))}
           </div>
           {Object.keys(bun).length ? (
@@ -114,14 +113,11 @@ function BurgerConstructor() {
               {countTotal}
             </span>
             <CurrencyIcon
-              className={classNames(BurgerConstructorStyles.icon, "pr-10")}
               type="primary"
-              width="24"
-              height="24"
             />
           </div>
           <button
-            disabled={disabled}
+            disabled={disabled!}
             className={classNames(
               BurgerConstructorStyles.submit,
               "pt-5 pb-5 pr-10 pl-10"

@@ -10,14 +10,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { requestPasswordChange } from "../services/actions/user";
 import { useForm } from "../services/hooks/useForm";
 import getErrorMessage from "../services/errorMessage";
+import { RootState } from "../services/reducers";
+import { AppDispatch } from "..";
 
 export const ForgotPasswordPage = () => {
-  const { requestFailed, errorMessage } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const { requestFailed, errorMessage } = useSelector((state: RootState) => state.user);
+  const dispatch: AppDispatch = useDispatch();
   const form = useForm({
     email: "",
   });
-  const { requestSuccess } = useSelector((state) => state.user);
+
+  const { values } = form;
+  const { requestSuccess } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -26,14 +30,14 @@ export const ForgotPasswordPage = () => {
     }
   }, [requestSuccess, navigate]);
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     form.handleChange(e);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    return dispatch(requestPasswordChange(form.values));
+    return dispatch(requestPasswordChange(values));
   };
 
   return (
@@ -49,7 +53,7 @@ export const ForgotPasswordPage = () => {
       <form className={FormPageStyles.form} onSubmit={(e) => handleSubmit(e)}>
         <EmailInput
           onChange={onChange}
-          value={form.values.email}
+          value={values.email || ''}
           name={"email"}
           isIcon={false}
           extraClass="mb-6"

@@ -4,31 +4,33 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames";
 import BurgerIngredientsStyles from "./burger-ingredients.module.css";
 import { useSelector } from "react-redux";
+import { RootState } from "../../services/reducers";
+import { TIngredient } from "../../types/types";
 
 function BurgerIngredients() {
   const [choice, setChoice] = React.useState("buns");
   const ingredients = useSelector(
-    (state) => state.burgerIngredients.ingredients
+    (state: RootState) => state.burgerIngredients.ingredients
   );
 
   const buns = React.useMemo(
-    () => ingredients.filter((item) => item.type === "bun"),
+    () => ingredients.filter((item: { type: string; }) => item.type === "bun"),
     [ingredients]
   );
   const sauces = React.useMemo(
-    () => ingredients.filter((item) => item.type === "sauce"),
+    () => ingredients.filter((item: { type: string; }) => item.type === "sauce"),
     [ingredients]
   );
   const mains = React.useMemo(
-    () => ingredients.filter((item) => item.type === "main"),
+    () => ingredients.filter((item: { type: string; }) => item.type === "main"),
     [ingredients]
   );
 
-  const pageRefs = React.useRef({});
-  const menuRef = React.useRef();
+  const pageRefs = React.useRef<any>({});
+  const menuRef = React.useRef<any>();
 
   React.useEffect(() => {
-    menuRef.current.addEventListener("scroll", () => {
+    menuRef.current?.addEventListener("scroll", () => {
       if (menuRef.current.scrollTop < 250) {
         setChoice("buns");
       }
@@ -41,7 +43,7 @@ function BurgerIngredients() {
     });
   }, []);
 
-  const scrollIntoView = (type) => {
+  const scrollIntoView = (type: string) => {
     pageRefs.current[type].scrollIntoView({ behavior: "smooth" });
   };
 
@@ -89,7 +91,7 @@ function BurgerIngredients() {
         </h2>
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {buns.length &&
-            buns.map((item) => (
+            buns.map((item: TIngredient) => (
               <IngredientElement item={item} key={item._id} />
             ))}
         </ul>
@@ -101,7 +103,7 @@ function BurgerIngredients() {
         </h2>
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {sauces.length &&
-            sauces.map((item) => (
+            sauces.map((item: TIngredient) => (
               <IngredientElement item={item} id={item._id} key={item._id} />
             ))}
         </ul>
@@ -113,7 +115,7 @@ function BurgerIngredients() {
         </h2>
         <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
           {mains.length &&
-            mains.map((item) => (
+            mains.map((item: TIngredient) => (
               <IngredientElement item={item} id={item._id} key={item._id} />
             ))}
         </ul>
