@@ -21,7 +21,13 @@ interface IConstructorItem {
   key?: string;
 }
 
-const ConstructorItem: FC<IConstructorItem> = ({ item, text, type, id, index }) => {
+const ConstructorItem: FC<IConstructorItem> = ({
+  item,
+  text,
+  type,
+  id,
+  index,
+}) => {
   const dispatch = useDispatch();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -114,6 +120,6 @@ const ConstructorItem: FC<IConstructorItem> = ({ item, text, type, id, index }) 
       />
     </div>
   );
-}
+};
 
 export default ConstructorItem;

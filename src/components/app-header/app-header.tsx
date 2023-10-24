@@ -17,7 +17,11 @@ function AppHeader() {
           <nav className={AppHeaderStyles.nav}>
             <NavLink
               to="/"
-              className={classNames(AppHeaderStyles.btn, AppHeaderStyles.active, "pl-5 pr-5 pb-4 pt-4")}
+              className={classNames(
+                AppHeaderStyles.btn,
+                AppHeaderStyles.active,
+                "pl-5 pr-5 pb-4 pt-4"
+              )}
               style={({ isActive }) => {
                 return {
                   color: isActive ? "#f2f2f3" : "#8585AD",
@@ -25,7 +29,9 @@ function AppHeader() {
               }}
             >
               <BurgerIcon type="primary" />
-              <span className="text text_type_main-default pl-2">Конструктор</span>
+              <span className="text text_type_main-default pl-2">
+                Конструктор
+              </span>
             </NavLink>
             <NavLink
               to="/feed"
@@ -42,7 +48,9 @@ function AppHeader() {
               </span>
             </NavLink>
           </nav>
-          <Link to="/" className={AppHeaderStyles.logo}><Logo /></Link>
+          <Link to="/" className={AppHeaderStyles.logo}>
+            <Logo />
+          </Link>
           <NavLink
             to="/profile"
             className={classNames(AppHeaderStyles.btn, "pl-5 pr-5 pb-4 pt-4")}
@@ -53,7 +61,9 @@ function AppHeader() {
             }}
           >
             <ProfileIcon type="secondary" />
-            <span className="text text_type_main-default pl-2">Личный кабинет</span>
+            <span className="text text_type_main-default pl-2">
+              Личный кабинет
+            </span>
           </NavLink>
         </div>
       </header>

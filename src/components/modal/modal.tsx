@@ -26,7 +26,9 @@ const Modal: FC<IModal> = ({ children, handleClose }) => {
     return () => document.removeEventListener("keydown", onKeydown);
   });
 
-  const onClose = (e?: React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement>) => {
+  const onClose = (
+    e?: React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement>
+  ) => {
     if (e) {
       e.stopPropagation();
     }
@@ -48,6 +50,6 @@ const Modal: FC<IModal> = ({ children, handleClose }) => {
     </>,
     modalRoot
   );
-}
+};
 
 export default Modal;

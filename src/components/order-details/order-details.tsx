@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC } from "react";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
 import OrderDetailsStyles from "./order-details.module.css";
 import confirmation from "../../images/confirmation.svg";
-import { RootState } from '../../services/reducers';
+import { RootState } from "../../services/reducers";
 
 const OrderDetails: FC = () => {
   const { orderNumber } = useSelector((state: RootState) => state.orderDetails);
@@ -49,6 +49,6 @@ const OrderDetails: FC = () => {
       </span>
     </div>
   );
-}
+};
 
 export default OrderDetails;

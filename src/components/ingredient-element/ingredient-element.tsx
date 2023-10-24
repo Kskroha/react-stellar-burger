@@ -1,15 +1,14 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo } from "react";
 import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames";
 import { useDrag } from "react-dnd";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../services/hooks/hooks";
 import IngredientElementStyles from "./ingredient-element.module.css";
 import { Link, useLocation } from "react-router-dom";
-import { RootState } from '../../services/reducers';
-import { TIngredient } from '../../types/types';
+import { TIngredient } from "../../types/types";
 
 interface IIngredientElement {
   item: TIngredient;
@@ -26,10 +25,10 @@ const IngredientElement: FC<IIngredientElement> = ({ item }) => {
     item: { item },
   });
 
-  const draggedItems: TIngredient[] = useSelector(
-    (state: RootState) => state.burgerConstructor
+  const draggedItems = useAppSelector(
+    (state) => state.burgerConstructor.draggedItems
   );
-  const bun = useSelector((state: any) => state.burgerConstructor);
+  const bun = useAppSelector((state) => state.burgerConstructor.bun);
 
   const currentItems = useMemo(
     () => draggedItems.filter((el) => el._id === item._id),
@@ -59,9 +58,7 @@ const IngredientElement: FC<IIngredientElement> = ({ item }) => {
           >
             {price}
           </span>
-          <CurrencyIcon
-            type="primary"
-          />
+          <CurrencyIcon type="primary" />
         </div>
         <h3
           className={classNames(
@@ -84,6 +81,6 @@ const IngredientElement: FC<IIngredientElement> = ({ item }) => {
       </li>
     </Link>
   );
-}
+};
 
 export default IngredientElement;

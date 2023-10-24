@@ -1,8 +1,6 @@
 import React from "react";
 import ConstructorItem from "../constructor-item/constructor-item";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import classNames from "classnames";
-import { useDispatch, useSelector } from "react-redux";
 import BurgerConstructorStyles from "./burger-constructor.module.css";
 import { useDrop } from "react-dnd";
 import { sendOrder } from "../../services/actions/order-details";
@@ -15,21 +13,19 @@ import OrderDetails from "../order-details/order-details";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { PuffLoader } from "react-spinners";
-import { RootState } from "../../services/reducers";
-import { AppDispatch } from "../..";
-import { TIngredient } from "../../types/types";
+import { useAppSelector, useAppDispatch } from "../../services/hooks/hooks";
 
 function BurgerConstructor() {
   const navigate = useNavigate();
-  const dispatch: AppDispatch = useDispatch();
-  const draggedItems: any[] = useSelector(
-    (state: RootState) => state.burgerConstructor
+  const dispatch = useAppDispatch();
+  const draggedItems = useAppSelector(
+    (state) => state.burgerConstructor.draggedItems
   );
-  const bun: TIngredient = useSelector((state: RootState) => state.burgerConstructor);
-  const { orderRequest, isOpen, orderNumber } = useSelector(
-    (state: RootState) => state.orderDetails
+  const bun = useAppSelector((state) => state.burgerConstructor.bun);
+  const { orderRequest, isOpen, orderNumber } = useAppSelector(
+    (state) => state.orderDetails
   );
-  const user = useSelector((state: RootState) => state.user.user);
+  const user = useAppSelector((state) => state.user.user);
 
   React.useEffect(() => {
     if (orderNumber !== 0) {
@@ -42,7 +38,7 @@ function BurgerConstructor() {
   const countTotal = React.useMemo(() => {
     const bunsPrice = bun.price * 2 || 0;
     const itemsPrice =
-      draggedItems.reduce((acc: any, item: { price: any; }) => {
+      draggedItems.reduce((acc, item) => {
         let sum = 0;
         sum = acc + item.price;
         return sum;
@@ -78,12 +74,7 @@ function BurgerConstructor() {
   return (
     <section ref={dropTarget}>
       <form action="#" method="post" onSubmit={(e) => handleSubmit(e)}>
-        <div
-          className={classNames(
-            BurgerConstructorStyles.container,
-            "mt-15 mb-10"
-          )}
-        >
+        <div className={BurgerConstructorStyles.container}>
           {Object.keys(bun).length ? (
             <ConstructorItem item={bun} text="верх" type="top" />
           ) : (
@@ -100,7 +91,8 @@ function BurgerConstructor() {
                   key={item.uniqueId}
                   item={item}
                   index={index}
-                  id={item._id}               />
+                  id={item._id}
+                />
               ))}
           </div>
           {Object.keys(bun).length ? (
@@ -112,16 +104,11 @@ function BurgerConstructor() {
             <span className="text text_type_digits-medium pr-2">
               {countTotal}
             </span>
-            <CurrencyIcon
-              type="primary"
-            />
+            <CurrencyIcon type="primary" />
           </div>
           <button
             disabled={disabled!}
-            className={classNames(
-              BurgerConstructorStyles.submit,
-              "pt-5 pb-5 pr-10 pl-10"
-            )}
+            className={BurgerConstructorStyles.submit}
             type="submit"
           >
             <span className="text text_type_main-default">Оформить заказ</span>
@@ -129,7 +116,9 @@ function BurgerConstructor() {
         </div>
       </form>
       {orderRequest && (
-        <div className={BurgerConstructorStyles.loader}><PuffLoader size={130} color="#ffffff" loading /></div>
+        <div className={BurgerConstructorStyles.loader}>
+          <PuffLoader size={130} color="#ffffff" loading />
+        </div>
       )}
       {isOpen && (
         <Modal>

@@ -1,7 +1,7 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
-import { RootState } from '../../services/reducers';
+import { RootState } from "../../services/reducers";
 
 interface IProtected {
   onlyUnAuth?: boolean;
@@ -25,6 +25,6 @@ const Protected: FC<IProtected> = ({ onlyUnAuth = false, component }) => {
 };
 
 export const OnlyAuth = Protected;
-export const OnlyUnAuth = ({ component }: {component: ReactElement}) => (
+export const OnlyUnAuth = ({ component }: { component: ReactElement }) => (
   <Protected onlyUnAuth={true} component={component} />
 );

@@ -1,16 +1,6 @@
-export type TLocation = {
-  background: {
-		pathname: string;
-		search: string;
-		hash: string;
-		state: null;
-		key: string;
-	}
-	from: string;
-	state?: object;
-};
-
 export type TIngredient = {
+  uniqueId: any;
+  item: any;
   _id: string;
   name: string;
   type: string;
@@ -24,14 +14,9 @@ export type TIngredient = {
   image_large: string;
 };
 
-export type TUser = {
-  name: string;
-  email: string;
-};
-
 export type TInputValue = {
   name?: string;
   email?: string;
   password?: string;
   token?: string;
-}
+};

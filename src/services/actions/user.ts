@@ -7,8 +7,8 @@ import {
   requestChange,
   reset,
 } from "../api";
-import { TInputValue, TUser } from "../../types/types";
-import { AppDispatch } from "../..";
+import { TInputValue } from "../../types/types";
+import { AppDispatch } from "../store";
 
 export const SET_AUTH_CHECKED = "SET_AUTH_CHECKED";
 export const SET_USER = "SET_USER";
@@ -22,7 +22,7 @@ export const setAuthChecked = (value: boolean) => ({
   payload: value,
 });
 
-export const setUser = (user: TUser | null) => ({
+export const setUser = (user: TInputValue | null) => ({
   type: SET_USER,
   payload: user,
 });
@@ -153,9 +153,9 @@ export const requestPasswordChange = (userEmail: TInputValue) => {
   };
 };
 
-export const resetPassword = (userPassword: TInputValue) => {
+export const resetPassword = (userData: TInputValue) => {
   return (dispatch: AppDispatch) => {
-    return reset(userPassword)
+    return reset(userData)
       .then(() => {
         dispatch({
           type: RESET_SUCCESS,

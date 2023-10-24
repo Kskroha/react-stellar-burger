@@ -7,6 +7,6 @@ export default function getErrorMessage(err: string) {
     case "email or password are incorrect":
       return "Проверьте email или пароль";
     default:
-      return "Что-то пошло не так. Повторите запрос"
+      return "Что-то пошло не так. Повторите запрос";
   }
-};
+}

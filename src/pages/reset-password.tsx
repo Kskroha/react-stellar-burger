@@ -6,18 +6,14 @@ import {
 import classNames from "classnames";
 import FormPageStyles from "./form.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../services/hooks/hooks";
 import { resetPassword } from "../services/actions/user";
-import { useForm } from "../services/hooks/useForm";
+import { useForm } from "../services/hooks/hooks";
 import getErrorMessage from "../services/errorMessage";
-import { RootState } from "../services/reducers";
-import { AppDispatch } from "..";
 
 export const ResetPasswordPage = () => {
-  const { requestFailed, errorMessage } = useSelector((state: RootState) => state.user);
-  const resetSuccess = useSelector(
-    (state: RootState) => state.user
-  );
+  const { requestFailed, errorMessage } = useAppSelector((state) => state.user);
+  const resetSuccess = useAppSelector((state) => state.user);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -25,7 +21,7 @@ export const ResetPasswordPage = () => {
       navigate("/");
     }
   }, [resetSuccess, navigate]);
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const form = useForm({
     password: "",
@@ -33,11 +29,6 @@ export const ResetPasswordPage = () => {
   });
 
   const { values } = form;
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    form.handleChange(e);
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,8 +55,8 @@ export const ResetPasswordPage = () => {
         <Input
           type={"password"}
           placeholder={"Введите новый пароль"}
-          onChange={onChange}
-          value={values.password || ''}
+          onChange={form.handleChange}
+          value={values.password || ""}
           name={"password"}
           error={false}
           ref={inputRef}
@@ -76,9 +67,9 @@ export const ResetPasswordPage = () => {
         />
         <Input
           type={"password"}
-          onChange={onChange}
+          onChange={form.handleChange}
           placeholder={"Введите код из письма"}
-          value={values.token || ''}
+          value={values.token || ""}
           name={"token"}
           error={false}
           ref={inputRef}
@@ -107,7 +98,11 @@ export const ResetPasswordPage = () => {
           Войти
         </Link>
       </p>
-      {requestFailed && <span className="text text_type_main-default">{getErrorMessage(errorMessage)}</span>}
+      {requestFailed && (
+        <span className="text text_type_main-default">
+          {getErrorMessage(errorMessage)}
+        </span>
+      )}
     </div>
   );
 };

@@ -3,41 +3,41 @@ import IngredientElement from "../ingredient-element/ingredient-element";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames";
 import BurgerIngredientsStyles from "./burger-ingredients.module.css";
-import { useSelector } from "react-redux";
-import { RootState } from "../../services/reducers";
+import { useAppSelector } from "../../services/hooks/hooks";
 import { TIngredient } from "../../types/types";
 
 function BurgerIngredients() {
   const [choice, setChoice] = React.useState("buns");
-  const ingredients = useSelector(
-    (state: RootState) => state.burgerIngredients.ingredients
+  const ingredients = useAppSelector(
+    (state) => state.burgerIngredients.ingredients
   );
 
   const buns = React.useMemo(
-    () => ingredients.filter((item: { type: string; }) => item.type === "bun"),
+    () => ingredients.filter((item: { type: string }) => item.type === "bun"),
     [ingredients]
   );
   const sauces = React.useMemo(
-    () => ingredients.filter((item: { type: string; }) => item.type === "sauce"),
+    () => ingredients.filter((item: { type: string }) => item.type === "sauce"),
     [ingredients]
   );
   const mains = React.useMemo(
-    () => ingredients.filter((item: { type: string; }) => item.type === "main"),
+    () => ingredients.filter((item: { type: string }) => item.type === "main"),
     [ingredients]
   );
 
-  const pageRefs = React.useRef<any>({});
-  const menuRef = React.useRef<any>();
+  const pageRefs = React.useRef<HTMLHeadingElement>(null);
+  const menuRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
-    menuRef.current?.addEventListener("scroll", () => {
-      if (menuRef.current.scrollTop < 250) {
+    const current = menuRef.current!;
+    current.addEventListener("scroll", () => {
+      if (current.scrollTop < 250) {
         setChoice("buns");
       }
-      if (menuRef.current.scrollTop > 250 && menuRef.current.scrollTop < 800) {
+      if (current.scrollTop > 250 && current.scrollTop < 800) {
         setChoice("sauces");
       }
-      if (menuRef.current.scrollTop > 800) {
+      if (current.scrollTop > 800) {
         setChoice("main");
       }
     });
@@ -84,7 +84,7 @@ function BurgerIngredients() {
       </div>
       <div className={BurgerIngredientsStyles.menu} ref={menuRef}>
         <h2
-          ref={(el) => (pageRefs.current = { ...pageRefs.current, buns: el })}
+          ref={(el) => ({ ...pageRefs.current, buns: el })}
           className="text text_type_main-medium"
         >
           Булки
@@ -96,7 +96,7 @@ function BurgerIngredients() {
             ))}
         </ul>
         <h2
-          ref={(el) => (pageRefs.current = { ...pageRefs.current, sauces: el })}
+          ref={(el) => ({ ...pageRefs.current, sauces: el })}
           className="text text_type_main-medium"
         >
           Соусы
@@ -109,7 +109,7 @@ function BurgerIngredients() {
         </ul>
         <h2
           className="text text_type_main-medium"
-          ref={(el) => (pageRefs.current = { ...pageRefs.current, main: el })}
+          ref={(el) => ({ ...pageRefs.current, main: el })}
         >
           Начинки
         </h2>

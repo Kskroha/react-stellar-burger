@@ -6,19 +6,17 @@ import {
 import { NavLink, useOutlet } from "react-router-dom";
 import classNames from "classnames";
 import ProfilePageStyles from "./profile.module.css";
-import { useSelector, useDispatch } from "react-redux";
 import { updateUserInfo } from "../services/actions/user";
 import { userLogout } from "../services/actions/user";
-import { useForm } from "../services/hooks/useForm";
+import { useForm } from "../services/hooks/hooks";
 import getErrorMessage from "../services/errorMessage";
-import { AppDispatch } from "..";
-import { RootState } from "../services/reducers";
+import { useAppSelector, useAppDispatch } from "../services/hooks/hooks";
 
 export const ProfilePage = () => {
-  const { requestFailed, errorMessage } = useSelector((state: RootState) => state.user);
+  const { requestFailed, errorMessage } = useAppSelector((state) => state.user);
   const outlet = useOutlet();
-  const dispatch: AppDispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user.user);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
 
   const [isEdit, setIsEdit] = React.useState(false);
   const form = useForm({
@@ -29,10 +27,6 @@ export const ProfilePage = () => {
 
   const { values } = form;
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    form.handleChange(e);
-    setIsEdit(true);
-  };
   const onClick = () => {
     setIsEdit(false);
     form.setValues({
@@ -104,8 +98,8 @@ export const ProfilePage = () => {
             <Input
               type={"text"}
               placeholder={"Имя"}
-              onChange={onChange}
-              value={values.name || ''}
+              onChange={form.handleChange}
+              value={values.name || ""}
               name={"name"}
               error={false}
               ref={inputRef}
@@ -118,17 +112,17 @@ export const ProfilePage = () => {
             <Input
               type={"email"}
               placeholder={"E-mail"}
-              onChange={onChange}
+              onChange={form.handleChange}
               icon="EditIcon"
-              value={values.email || ''}
+              value={values.email || ""}
               name={"email"}
               extraClass="mb-6"
             />
             <Input
               type={"password"}
-              onChange={onChange}
+              onChange={form.handleChange}
               placeholder={"Пароль"}
-              value={values.password || ''}
+              value={values.password || ""}
               name={"password"}
               extraClass="mb-6"
               icon="EditIcon"
@@ -166,7 +160,11 @@ export const ProfilePage = () => {
           </span>
         </>
       )}
-      {requestFailed && <span className="text text_type_main-default">{getErrorMessage(errorMessage)}</span>}
+      {requestFailed && (
+        <span className="text text_type_main-default">
+          {getErrorMessage(errorMessage)}
+        </span>
+      )}
     </div>
   );
 };
