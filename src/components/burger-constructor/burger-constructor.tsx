@@ -86,7 +86,7 @@ function BurgerConstructor() {
             className={BurgerConstructorStyles.constructor as unknown as string}
           >
             {draggedItems &&
-              draggedItems.map((item: any, index: number) => (
+              draggedItems.map((item, index) => (
                 <ConstructorItem
                   key={item.uniqueId}
                   item={item}

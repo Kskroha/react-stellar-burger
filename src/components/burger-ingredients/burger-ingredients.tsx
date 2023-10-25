@@ -7,7 +7,7 @@ import { useAppSelector } from "../../services/hooks/hooks";
 import { TIngredient } from "../../types/types";
 
 function BurgerIngredients() {
-  const [choice, setChoice] = React.useState("buns");
+  const [choice, setChoice] = React.useState("");
   const ingredients = useAppSelector(
     (state) => state.burgerIngredients.ingredients
   );
@@ -25,27 +25,27 @@ function BurgerIngredients() {
     [ingredients]
   );
 
-  const pageRefs = React.useRef<HTMLHeadingElement>(null);
-  const menuRef = React.useRef<HTMLDivElement | null>(null);
-
-  React.useEffect(() => {
-    const current = menuRef.current!;
-    current.addEventListener("scroll", () => {
-      if (current.scrollTop < 250) {
-        setChoice("buns");
-      }
-      if (current.scrollTop > 250 && current.scrollTop < 800) {
-        setChoice("sauces");
-      }
-      if (current.scrollTop > 800) {
-        setChoice("main");
-      }
-    });
-  }, []);
+  const pageRefs = React.useRef<any>(null);
+  const menuRef = React.useRef<HTMLDivElement>(null);
 
   const scrollIntoView = (type: string) => {
+    //@ts-ignore;
     pageRefs.current[type].scrollIntoView({ behavior: "smooth" });
   };
+
+  React.useEffect(() => {
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setChoice(entry.target.id);
+        }
+      })
+    }, {});
+
+    Object.values(pageRefs.current).forEach((page: any) => {
+      sectionObserver.observe(page);
+    });
+  }, [])
 
   return (
     <section className={BurgerIngredientsStyles.section}>
@@ -84,8 +84,8 @@ function BurgerIngredients() {
       </div>
       <div className={BurgerIngredientsStyles.menu} ref={menuRef}>
         <h2
-          ref={(el) => ({ ...pageRefs.current, buns: el })}
-          className="text text_type_main-medium"
+          ref={(el) => (pageRefs.current = { ...pageRefs.current, buns: el })}
+          className="text text_type_main-medium" id="buns"
         >
           Булки
         </h2>
@@ -96,8 +96,8 @@ function BurgerIngredients() {
             ))}
         </ul>
         <h2
-          ref={(el) => ({ ...pageRefs.current, sauces: el })}
-          className="text text_type_main-medium"
+          ref={(el) => (pageRefs.current ={ ...pageRefs.current, sauces: el })}
+          className="text text_type_main-medium" id="sauces"
         >
           Соусы
         </h2>
@@ -108,8 +108,8 @@ function BurgerIngredients() {
             ))}
         </ul>
         <h2
-          className="text text_type_main-medium"
-          ref={(el) => ({ ...pageRefs.current, main: el })}
+          className="text text_type_main-medium" id="main"
+          ref={(el) => (pageRefs.current = { ...pageRefs.current, main: el })}
         >
           Начинки
         </h2>
