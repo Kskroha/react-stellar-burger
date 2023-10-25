@@ -5,13 +5,12 @@ import classNames from "classnames";
 import BurgerIngredientsStyles from "./burger-ingredients.module.css";
 import { useAppSelector } from "../../services/hooks/hooks";
 import { TIngredient } from "../../types/types";
+import { useInView } from "react-intersection-observer";
 
 function BurgerIngredients() {
-  const [choice, setChoice] = React.useState("");
   const ingredients = useAppSelector(
     (state) => state.burgerIngredients.ingredients
   );
-
   const buns = React.useMemo(
     () => ingredients.filter((item: { type: string }) => item.type === "bun"),
     [ingredients]
@@ -24,28 +23,39 @@ function BurgerIngredients() {
     () => ingredients.filter((item: { type: string }) => item.type === "main"),
     [ingredients]
   );
+  const [current, setCurrent] = React.useState<string>("");
+  const [bunRef, bunInView] = useInView();
+  const [sauceRef, sauceInView] = useInView();
+  const [mainRef, mainInView] = useInView();
 
-  const pageRefs = React.useRef<any>(null);
-  const menuRef = React.useRef<HTMLDivElement>(null);
-
-  const scrollIntoView = (type: string) => {
-    //@ts-ignore;
-    pageRefs.current[type].scrollIntoView({ behavior: "smooth" });
+  const clickTab = (type: string) => {
+    setCurrent(type);
+    const section = document.getElementById(type) as HTMLElement;
+    section.scrollIntoView({ behavior: "smooth" });
   };
 
   React.useEffect(() => {
-    const sectionObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setChoice(entry.target.id);
-        }
-      })
-    }, {});
+    const handleIngredientScroll = () => {
+      switch (true) {
+        case bunInView:
+          setCurrent("buns");
+          break;
+        case sauceInView:
+          setCurrent("sauces");
+          break;
+        case mainInView:
+          setCurrent("main");
+          break;
+        default:
+          break;
+      }
+    };
+    handleIngredientScroll();
+  },
+  [bunInView, sauceInView, mainInView]);
 
-    Object.values(pageRefs.current).forEach((page: any) => {
-      sectionObserver.observe(page);
-    });
-  }, [])
+
+  const menuRef = React.useRef<HTMLDivElement>(null);
 
   return (
     <section className={BurgerIngredientsStyles.section}>
@@ -53,72 +63,66 @@ function BurgerIngredients() {
       <div className="mb-10" style={{ display: "flex" }}>
         <Tab
           value="buns"
-          active={choice === "buns"}
+          active={current === "buns"}
           onClick={() => {
-            setChoice("buns");
-            scrollIntoView("buns");
+            clickTab("buns");
           }}
         >
           Булки
         </Tab>
         <Tab
           value="sauces"
-          active={choice === "sauces"}
+          active={current === "sauces"}
           onClick={() => {
-            setChoice("sauces");
-            scrollIntoView("sauces");
+            clickTab("sauces");
           }}
         >
           Соусы
         </Tab>
         <Tab
           value="main"
-          active={choice === "main"}
+          active={current === "main"}
           onClick={() => {
-            setChoice("main");
-            scrollIntoView("main");
+            clickTab("main");
           }}
         >
           Начинки
         </Tab>
       </div>
       <div className={BurgerIngredientsStyles.menu} ref={menuRef}>
-        <h2
-          ref={(el) => (pageRefs.current = { ...pageRefs.current, buns: el })}
-          className="text text_type_main-medium" id="buns"
-        >
-          Булки
-        </h2>
-        <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
-          {buns.length &&
-            buns.map((item: TIngredient) => (
-              <IngredientElement item={item} key={item._id} />
-            ))}
-        </ul>
-        <h2
-          ref={(el) => (pageRefs.current ={ ...pageRefs.current, sauces: el })}
-          className="text text_type_main-medium" id="sauces"
-        >
-          Соусы
-        </h2>
-        <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
-          {sauces.length &&
-            sauces.map((item: TIngredient) => (
-              <IngredientElement item={item} id={item._id} key={item._id} />
-            ))}
-        </ul>
-        <h2
-          className="text text_type_main-medium" id="main"
-          ref={(el) => (pageRefs.current = { ...pageRefs.current, main: el })}
-        >
-          Начинки
-        </h2>
-        <ul className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}>
-          {mains.length &&
-            mains.map((item: TIngredient) => (
-              <IngredientElement item={item} id={item._id} key={item._id} />
-            ))}
-        </ul>
+        <div id="buns" ref={bunRef}>
+          <h2 className="text text_type_main-medium">Булки</h2>
+          <ul
+            className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}
+          >
+            {buns.length &&
+              buns.map((item: TIngredient) => (
+                <IngredientElement item={item} key={item._id} />
+              ))}
+          </ul>
+        </div>
+        <div id="sauces" ref={sauceRef}>
+          <h2 className="text text_type_main-medium">Соусы</h2>
+          <ul
+            className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}
+          >
+            {sauces.length &&
+              sauces.map((item: TIngredient) => (
+                <IngredientElement item={item} id={item._id} key={item._id} />
+              ))}
+          </ul>
+        </div>
+        <div id="main" ref={mainRef}>
+          <h2 className="text text_type_main-medium">Начинки</h2>
+          <ul
+            className={classNames(BurgerIngredientsStyles.list, "pt-6 pb-15")}
+          >
+            {mains.length &&
+              mains.map((item: TIngredient) => (
+                <IngredientElement item={item} id={item._id} key={item._id} />
+              ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

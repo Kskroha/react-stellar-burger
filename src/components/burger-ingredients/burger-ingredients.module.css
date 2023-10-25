@@ -1,6 +1,6 @@
-.section {
+/* .section {
   max-height: 650px;
-}
+} */
 
 .list {
   margin: 0;
@@ -13,7 +13,7 @@
 }
 
 .menu {
-  max-height: 480px;
+  max-height: 600px;
   overflow: scroll;
   overflow-x: hidden;
 }
