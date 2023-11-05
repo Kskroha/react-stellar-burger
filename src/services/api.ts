@@ -1,4 +1,4 @@
-import { TIngredient, TInputValue } from "../types/types";
+import { TIngredient, TInputValue, TOrder } from "../types/types";
 
 const PATH = "https://norma.nomoreparties.space/api";
 
@@ -29,9 +29,10 @@ const fetchWithRefresh = async (url: string, options: RequestInit) => {
   }
 };
 
-function request(url: string, options?: RequestInit) {
+async function request(url: string, options?: RequestInit) {
   const baseUrl = PATH;
-  return fetch(`${baseUrl}/${url}`, options).then(checkResponse);
+  const res = await fetch(`${baseUrl}/${url}`, options);
+  return checkResponse(res);
 }
 
 export async function getIngredientsRequest() {
@@ -72,7 +73,7 @@ export const refreshToken = () => {
   });
 };
 
-export const getUserData = () => {
+export const getUserData = (): Promise<void> => {
   const requestHeaders: HeadersInit = new Headers();
   requestHeaders.set("Content-Type", "application/json");
   requestHeaders.set("Authorization", localStorage.getItem("accessToken")!);

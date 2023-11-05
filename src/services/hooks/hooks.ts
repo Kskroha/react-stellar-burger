@@ -1,8 +1,9 @@
 import React from "react";
 import { TInputValue } from "../../types/types";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../reducers";
-import type { AppDispatch } from "../store";
+import { AppDispatch } from "../../types";
+import { RootState } from "../../types";
+import type {} from "redux-thunk/extend-redux";
 
 export function useForm(inputValues: TInputValue) {
   const [values, setValues] = React.useState<TInputValue & {}>(inputValues);

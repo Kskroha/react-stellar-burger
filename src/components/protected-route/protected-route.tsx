@@ -1,7 +1,7 @@
 import { FC, ReactElement } from "react";
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
-import { RootState } from "../../services/reducers";
+import { useAppSelector } from "../../services/hooks/hooks";
+import { TUser } from "../../types/types";
 
 interface IProtected {
   onlyUnAuth?: boolean;
@@ -9,7 +9,7 @@ interface IProtected {
 }
 
 const Protected: FC<IProtected> = ({ onlyUnAuth = false, component }) => {
-  const user = useSelector((state: RootState) => state.user.user);
+  const user: TUser = useAppSelector((state) => state.user["user"]);
   const location = useLocation();
 
   if (onlyUnAuth && user) {

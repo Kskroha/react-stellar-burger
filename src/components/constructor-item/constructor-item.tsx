@@ -8,7 +8,7 @@ import {
 import {
   REMOVE_ITEM,
   MOVE_ITEM,
-} from "../../services/actions/burger-constructor";
+} from "../../services/constants";
 import ConstructorItemStyles from "./constructor-item.module.css";
 import { TIngredient } from "../../types/types";
 

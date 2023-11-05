@@ -4,28 +4,26 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import BurgerConstructorStyles from "./burger-constructor.module.css";
 import { useDrop } from "react-dnd";
 import { sendOrder } from "../../services/actions/order-details";
-import {
-  ADD_ITEM,
-  CLEAN_CONSTRUCTOR,
-} from "../../services/actions/burger-constructor";
+import { ADD_ITEM, CLEAN_CONSTRUCTOR } from "../../services/constants";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { PuffLoader } from "react-spinners";
 import { useAppSelector, useAppDispatch } from "../../services/hooks/hooks";
+import { TIngredient, TUser } from "../../types/types";
 
 function BurgerConstructor() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const draggedItems = useAppSelector(
+  const draggedItems: Array<TIngredient> = useAppSelector(
     (state) => state.burgerConstructor.draggedItems
   );
-  const bun = useAppSelector((state) => state.burgerConstructor.bun);
+  const bun: TIngredient = useAppSelector((state) => state.burgerConstructor.bun);
   const { orderRequest, isOpen, orderNumber } = useAppSelector(
     (state) => state.orderDetails
   );
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.user["user"]);
 
   React.useEffect(() => {
     if (orderNumber !== 0) {

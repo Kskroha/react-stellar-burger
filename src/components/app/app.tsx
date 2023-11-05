@@ -18,6 +18,8 @@ import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route";
 import { checkUserAuth } from "../../services/actions/user";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 import { useNavigate } from "react-router-dom";
+import { OrdersPage } from "../../pages/orders";
+import Feed from "../../pages/feed";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -42,6 +44,7 @@ function App() {
       <AppHeader />
       <Routes location={background || location}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/feed" element={<Feed />} />
         <Route path="/ingredients/:id" element={<IngredientDetails />} />
         <Route
           path="/login"
@@ -63,8 +66,8 @@ function App() {
           path="/profile"
           element={<OnlyAuth component={<ProfilePage />} />}
         >
-          <Route path="orders" />
-          <Route path="orders/:id" />
+          <Route path="orders" element={<OrdersPage />}/>
+          {/* <Route path="orders/:id" /> */}
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

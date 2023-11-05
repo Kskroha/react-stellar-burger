@@ -4,76 +4,114 @@ import {
   getUserData,
   update,
   logout,
-  requestChange,
   reset,
+  requestChange,
 } from "../api";
-import { TInputValue } from "../../types/types";
-import { AppDispatch } from "../store";
+import { TIngredient, TInputValue, TUser } from "../../types/types";
+import { AppDispatch, AppThunk } from "../../types";
+import {
+  CLEAN_STATE,
+  REQUEST_CHANGE_SUCCESS,
+  REQUEST_FAILED,
+  RESET_SUCCESS,
+  SET_AUTH_CHECKED,
+  SET_USER,
+} from "../constants";
 
-export const SET_AUTH_CHECKED = "SET_AUTH_CHECKED";
-export const SET_USER = "SET_USER";
-export const REQUEST_CHANGE_SUCCESS = "REQUEST_CHANGE_SUCCESS";
-export const RESET_SUCCESS = "RESET_SUCCESS";
-export const REQUEST_FAILED = "REQUEST_FAILED";
-export const CLEAN_STATE = "CLEAN_STATE";
+export interface ISetAuthCheckedAction {
+  readonly type: typeof SET_AUTH_CHECKED;
+  readonly payload: boolean;
+}
 
-export const setAuthChecked = (value: boolean) => ({
+export interface ISetUserAction {
+  readonly type: typeof SET_USER;
+  readonly user: null | TUser;
+}
+
+export interface ISetErrorAction {
+  readonly type: typeof REQUEST_FAILED;
+  readonly error: { message: string };
+}
+
+export interface ICleanStateAction {
+  readonly type: typeof CLEAN_STATE;
+}
+
+export interface IRequestChangeSuccessAction {
+  readonly type: typeof REQUEST_CHANGE_SUCCESS;
+  order: TIngredient[];
+}
+
+export interface IResetSuccessAction {
+  readonly type: typeof RESET_SUCCESS;
+}
+
+export const setAuthChecked = (value: boolean): ISetAuthCheckedAction => ({
   type: SET_AUTH_CHECKED,
   payload: value,
 });
 
-export const setUser = (user: TInputValue | null) => ({
+export const setUser = (user: null | TUser): ISetUserAction => ({
   type: SET_USER,
-  payload: user,
+  user,
 });
 
-export const getUser = () => {
-  return (dispatch: AppDispatch) => {
-    return getUserData()
-      .then((res) => {
-        dispatch(setUser(res.user));
-      })
-      .catch((err) => {
-        dispatch(setError(err));
-      })
-      .finally(() => {
-        setTimeout(() => dispatch(cleanState()), 3500);
-      });
-  };
-};
-
-export const setError = (err: any) => ({
+export const setError = (error: { message: string }): ISetErrorAction => ({
   type: REQUEST_FAILED,
-  payload: err.message,
+  error,
 });
 
-export const cleanState = () => ({
+export const setRequestChangeSuccess = (
+  res: any
+): IRequestChangeSuccessAction => ({
+  type: REQUEST_CHANGE_SUCCESS,
+  order: res.order,
+});
+
+export const cleanState = (): ICleanStateAction => ({
   type: CLEAN_STATE,
 });
 
-export const updateUserInfo = (userData: TInputValue) => {
-  return (dispatch: AppDispatch) => {
+export const setResetSuccess = (): IResetSuccessAction => ({
+  type: RESET_SUCCESS,
+});
+
+export const updateUserInfo: AppThunk =
+  (userData: TInputValue) => (dispatch: AppDispatch) => {
     return update(userData)
       .then((res) => {
         dispatch(setUser(res.user));
       })
-      .catch((err) => {
-        dispatch(setError(err));
+      .catch((error) => {
+        dispatch(setError(error.message));
       })
       .finally(() => {
         setTimeout(() => dispatch(cleanState()), 3500);
       });
   };
-};
 
-export const registerNewUser = (userData: TInputValue) => {
-  return (dispatch: AppDispatch) => {
+export const registerNewUser: AppThunk =
+  (userData: TInputValue) => (dispatch: AppDispatch) => {
     return register(userData)
       .then((res) => {
         localStorage.setItem("accessToken", res.accessToken);
         localStorage.setItem("refreshToken", res.refreshToken);
         dispatch(setUser(res.user));
         dispatch(setAuthChecked(true));
+      })
+      .catch((error) => {
+        dispatch(setError(error.message));
+      })
+      .finally(() => {
+        setTimeout(() => dispatch(cleanState()), 3500);
+      });
+  };
+
+export const getUser = () => {
+  return (dispatch: AppDispatch) => {
+    return getUserData()
+      .then((res: any) => {
+        dispatch(setUser(res.user));
       })
       .catch((err) => {
         dispatch(setError(err));
@@ -85,7 +123,7 @@ export const registerNewUser = (userData: TInputValue) => {
 };
 
 export const checkUserAuth = () => {
-  return (dispatch: any) => {
+  return (dispatch: AppDispatch) => {
     if (localStorage.getItem("accessToken")) {
       dispatch(getUser())
         .catch(() => {
@@ -100,25 +138,23 @@ export const checkUserAuth = () => {
   };
 };
 
-export const userLogout = () => {
-  return (dispatch: AppDispatch) => {
-    return logout()
-      .then(() => {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        dispatch(setUser(null));
-      })
-      .catch((err) => {
-        dispatch(setError(err));
-      })
-      .finally(() => {
-        setTimeout(() => dispatch(cleanState()), 3500);
-      });
-  };
+export const userLogout: AppThunk = () => (dispatch: AppDispatch) => {
+  return logout()
+    .then(() => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      dispatch(setUser(null));
+    })
+    .catch((error) => {
+      dispatch(setError(error.message));
+    })
+    .finally(() => {
+      setTimeout(() => dispatch(cleanState()), 3500);
+    });
 };
 
-export const userLogin = (userData: TInputValue) => {
-  return (dispatch: AppDispatch) => {
+export const userLogin: AppThunk =
+  (userData: TInputValue) => (dispatch: AppDispatch) => {
     return login(userData)
       .then((res) => {
         localStorage.setItem("accessToken", res.accessToken);
@@ -126,46 +162,46 @@ export const userLogin = (userData: TInputValue) => {
         dispatch(setAuthChecked(true));
         dispatch(setUser(res.user));
       })
-      .catch((err) => {
-        dispatch(setError(err));
+      .catch((error) => {
+        dispatch(setError(error.message));
       })
       .finally(() => {
         setTimeout(() => dispatch(cleanState()), 3500);
       });
   };
-};
 
-export const requestPasswordChange = (userEmail: TInputValue) => {
-  return (dispatch: AppDispatch) => {
+export const requestPasswordChange: AppThunk =
+  (userEmail: TInputValue) => (dispatch: AppDispatch) => {
     return requestChange(userEmail)
-      .then((res) => {
-        dispatch({
-          type: REQUEST_CHANGE_SUCCESS,
-          order: res.order,
-        });
+      .then((res: any) => {
+        dispatch(setRequestChangeSuccess(res));
       })
-      .catch((err) => {
-        dispatch(setError(err));
+      .catch((error: any) => {
+        dispatch(setError(error.message));
       })
       .finally(() => {
         setTimeout(() => dispatch(cleanState()), 3500);
       });
   };
-};
 
-export const resetPassword = (userData: TInputValue) => {
-  return (dispatch: AppDispatch) => {
+export const resetPassword: AppThunk =
+  (userData: TInputValue) => (dispatch: AppDispatch) => {
     return reset(userData)
       .then(() => {
-        dispatch({
-          type: RESET_SUCCESS,
-        });
+        dispatch(setResetSuccess());
       })
-      .catch((err) => {
-        dispatch(setError(err));
+      .catch((error) => {
+        dispatch(setError(error.message));
       })
       .finally(() => {
         setTimeout(() => dispatch(cleanState()), 3500);
       });
   };
-};
+
+  export type TUserActions =
+  | ISetAuthCheckedAction
+  | ISetUserAction
+  | ISetErrorAction
+  | ICleanStateAction
+  | IRequestChangeSuccessAction
+  | IResetSuccessAction;

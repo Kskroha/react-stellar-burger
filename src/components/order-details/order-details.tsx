@@ -1,12 +1,11 @@
 import { FC } from "react";
 import classNames from "classnames";
-import { useSelector } from "react-redux";
 import OrderDetailsStyles from "./order-details.module.css";
 import confirmation from "../../images/confirmation.svg";
-import { RootState } from "../../services/reducers";
+import { useAppSelector } from "../../services/hooks/hooks";
 
 const OrderDetails: FC = () => {
-  const { orderNumber } = useSelector((state: RootState) => state.orderDetails);
+  const { orderNumber } = useAppSelector((state) => state.orderDetails);
 
   return (
     <div className={classNames(OrderDetailsStyles.content, "pt-20")}>

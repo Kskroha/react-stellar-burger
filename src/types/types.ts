@@ -20,3 +20,33 @@ export type TInputValue = {
   password?: string;
   token?: string;
 };
+
+export type TOrder = {
+  ingredients: Array<string>;
+  _id: string;
+  status: string;
+  name: string;
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TUser = {
+  name: string;
+  email: string;
+};
+
+export type TFeedResponse = {
+  success: boolean;
+  orders: Array<TOrder>;
+  total: number;
+  totalToday: number;
+};
+
+export type TWSActions = {
+  wsInit: string;
+  onOpen: string;
+  onClose: string;
+  onError: string;
+  onMessage: string;
+};
