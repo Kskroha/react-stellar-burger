@@ -1,4 +1,4 @@
-import { TIngredient, TInputValue, TOrder } from "../types/types";
+import { TIngredient, TInputValue } from "../types/types";
 
 const PATH = "https://norma.nomoreparties.space/api";
 
@@ -35,6 +35,10 @@ async function request(url: string, options?: RequestInit) {
   return checkResponse(res);
 }
 
+export async function getOrderRequest(orderNumber: number) {
+  return await request(`orders/${orderNumber}`);
+}
+
 export async function getIngredientsRequest() {
   return await request("ingredients");
 }
@@ -44,6 +48,7 @@ export async function sendOrderRequest(items: TIngredient[]) {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
+      "Authorization": localStorage.getItem("accessToken")!,
     },
     body: JSON.stringify({
       ingredients: items.map((item) => item._id),

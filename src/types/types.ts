@@ -1,6 +1,7 @@
 export type TIngredient = {
   uniqueId: any;
   item: any;
+  id?: string;
   _id: string;
   name: string;
   type: string;
@@ -12,6 +13,7 @@ export type TIngredient = {
   image: string;
   image_mobile: string;
   image_large: string;
+  count?: number;
 };
 
 export type TInputValue = {
@@ -22,7 +24,7 @@ export type TInputValue = {
 };
 
 export type TOrder = {
-  ingredients: Array<string>;
+  ingredients: Array<TIngredient>;
   _id: string;
   status: string;
   name: string;

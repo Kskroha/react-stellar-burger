@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { PuffLoader } from "react-spinners";
 import { useAppSelector, useAppDispatch } from "../../services/hooks/hooks";
-import { TIngredient, TUser } from "../../types/types";
+import { TIngredient } from "../../types/types";
 
 function BurgerConstructor() {
   const navigate = useNavigate();

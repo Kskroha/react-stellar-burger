@@ -1,12 +1,19 @@
+import { TOrder } from "../../types/types";
 import { TOrderDetailsActions } from "../actions/order-details";
 import {
   SEND_ORDER_REQUEST,
   SEND_ORDER_SUCCESS,
   SEND_ORDER_FAILED,
   CLOSE_MODAL,
+  GET_CURRENT_ORDER_FAILED,
+  GET_CURRENT_ORDER_REQUEST,
+  GET_CURRENT_ORDER_SUCCESS,
 } from "../constants";
 
 type TOrderDetailsInitialState = {
+  currentOrder: TOrder;
+  currentOrderRequest: boolean,
+  currentOrderFailed: boolean,
   orderNumber: number,
   orderRequest: boolean,
   orderFailed: boolean,
@@ -14,6 +21,9 @@ type TOrderDetailsInitialState = {
 };
 
 const initialState: TOrderDetailsInitialState = {
+  currentOrder: {} as TOrder,
+  currentOrderRequest: false,
+  currentOrderFailed: false,
   orderNumber: 0,
   orderRequest: false,
   orderFailed: false,
@@ -50,6 +60,27 @@ export const orderDetailsReducer = (state = initialState, action: TOrderDetailsA
         orderNumber: 0,
         orderRequest: false,
         orderFailed: false,
+      };
+    }
+    case GET_CURRENT_ORDER_REQUEST: {
+      return {
+        ...state,
+        currentOrderRequest: true,
+        currentOrderFailed: false,
+      };
+    }
+    case GET_CURRENT_ORDER_SUCCESS: {
+      return {
+        ...state,
+        currentOrder: action.order,
+        currentOrderRequest: false,
+        isOpen: true,
+      };
+    }
+    case GET_CURRENT_ORDER_FAILED: {
+      return {
+        ...initialState,
+        currentOrderFailed: true,
       };
     }
     default: {

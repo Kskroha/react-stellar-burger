@@ -19,9 +19,6 @@
 }
 
 .orderList {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
   max-height: 700px;
   padding-right: 8px;
   overflow: scroll;

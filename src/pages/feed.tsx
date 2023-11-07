@@ -6,7 +6,6 @@ import {
   wsFeedConnectionClosed,
 } from "../services/actions/ws-feed";
 import FeedStyles from "./feed.module.css";
-import { Link, useLocation } from "react-router-dom";
 import OrderCard from "../components/order-card/order-card";
 import { OrderStat } from "../components/order-stat/order-stat";
 
@@ -19,8 +18,6 @@ export const Feed: FC = () => {
       dispatch(wsFeedConnectionClosed());
     };
   }, [dispatch]);
-
-  // const location = useLocation();
   const { orders } = useAppSelector((store) => store.wsFeed);
 
   return (
@@ -31,16 +28,7 @@ export const Feed: FC = () => {
           {orders &&
             orders.map((order) => {
               return (
-                <Link
-                  to={{
-                    pathname: `${location.pathname}/${order._id}`,
-                    // state: { background: location },
-                  }}
-                  className={FeedStyles.link}
-                  key={order._id}
-                >
-                  <OrderCard order={order} statusShown={false} />
-                </Link>
+                <OrderCard order={order} statusShown={false} />
               );
             })}
         </div>

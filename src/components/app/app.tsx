@@ -1,4 +1,3 @@
-import React from "react";
 import AppHeader from "../app-header/app-header";
 import appStyles from "./app.module.css";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -20,21 +19,24 @@ import { getIngredients } from "../../services/actions/burger-ingredients";
 import { useNavigate } from "react-router-dom";
 import { OrdersPage } from "../../pages/orders";
 import Feed from "../../pages/feed";
+import OrderInfo from "../order-info/order-info";
+import { useEffect } from "react";
 
 function App() {
   const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getIngredients());
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(checkUserAuth());
   }, [dispatch]);
   const location = useLocation();
   const background = location.state && location.state.background;
 
   const navigate = useNavigate();
+
   const handleClose = () => {
     navigate(-1);
   };
@@ -66,9 +68,12 @@ function App() {
           path="/profile"
           element={<OnlyAuth component={<ProfilePage />} />}
         >
-          <Route path="orders" element={<OrdersPage />}/>
-          {/* <Route path="orders/:id" /> */}
+          <Route path="orders" element={<OrdersPage />} />
         </Route>
+        <Route
+          path="/profile/orders/:id"
+          element={<OnlyAuth component={<OrderInfo />} />}
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
@@ -82,6 +87,30 @@ function App() {
               </Modal>
             }
           />
+        </Routes>
+      )}
+      {background && (
+        <Routes>
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal handleClose={handleClose}>
+                <OrderInfo />
+              </Modal>
+            }
+          ></Route>
+        </Routes>
+      )}
+      {background && (
+        <Routes>
+          <Route
+            path="profile/orders/:id"
+            element={
+              <Modal handleClose={handleClose}>
+                <OrderInfo />
+              </Modal>
+            }
+          ></Route>
         </Routes>
       )}
     </div>
