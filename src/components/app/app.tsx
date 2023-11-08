@@ -21,9 +21,18 @@ import { OrdersPage } from "../../pages/orders";
 import Feed from "../../pages/feed";
 import OrderInfo from "../order-info/order-info";
 import { useEffect } from "react";
+import { CLOSE_MODAL } from "../../services/constants";
 
 function App() {
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const background = location.state && location.state.background;
+
+  const navigate = useNavigate();
+  const handleClose = () => {
+    navigate(-1);
+    dispatch({type: CLOSE_MODAL});
+  };
 
   useEffect(() => {
     dispatch(getIngredients());
@@ -32,14 +41,6 @@ function App() {
   useEffect(() => {
     dispatch(checkUserAuth());
   }, [dispatch]);
-  const location = useLocation();
-  const background = location.state && location.state.background;
-
-  const navigate = useNavigate();
-
-  const handleClose = () => {
-    navigate(-1);
-  };
 
   return (
     <div className={appStyles.page}>
@@ -47,6 +48,7 @@ function App() {
       <Routes location={background || location}>
         <Route path="/" element={<HomePage />} />
         <Route path="/feed" element={<Feed />} />
+        <Route path="/feed/:id" element={<OrderInfo />} />
         <Route path="/ingredients/:id" element={<IngredientDetails />} />
         <Route
           path="/login"
@@ -87,10 +89,6 @@ function App() {
               </Modal>
             }
           />
-        </Routes>
-      )}
-      {background && (
-        <Routes>
           <Route
             path="/feed/:id"
             element={
@@ -99,12 +97,8 @@ function App() {
               </Modal>
             }
           ></Route>
-        </Routes>
-      )}
-      {background && (
-        <Routes>
           <Route
-            path="profile/orders/:id"
+            path="/profile/orders/:id"
             element={
               <Modal handleClose={handleClose}>
                 <OrderInfo />

@@ -1,6 +1,5 @@
 import { FC, useRef, useCallback } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
 import {
   ConstructorElement,
   DragIcon,
@@ -11,6 +10,7 @@ import {
 } from "../../services/constants";
 import ConstructorItemStyles from "./constructor-item.module.css";
 import { TIngredient } from "../../types/types";
+import { useAppDispatch } from "../../services/hooks/hooks";
 
 interface IConstructorItem {
   item: TIngredient;
@@ -28,7 +28,7 @@ const ConstructorItem: FC<IConstructorItem> = ({
   id,
   index,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop({

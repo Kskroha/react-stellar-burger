@@ -44,9 +44,10 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
   };
   return (
     <Link
-      to={`${path}/${order._id}`}
+      to={`${path}/${order.number}`}
       className={OrderCardStyles.link}
       state={{ background: location }}
+      key={order?._id}
     >
       <div className={OrderCardStyles.container}>
         <span
@@ -85,9 +86,9 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
           {orderIngredients.length < maxIngregientsLength
             ? Array.from(new Set(orderIngredients)).map((item, index) => (
                 <div
+                  key={item?._id}
                   className={OrderCardStyles.picture}
                   style={{ zIndex: 1000 - index }}
-                  key={item?._id}
                 >
                   <img
                     className={OrderCardStyles.image}
@@ -103,40 +104,39 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
                 .map((item, index) => {
                   if (index === maxIngregientsLength) {
                     return (
-                      <>
-                        <div
-                          className={OrderCardStyles.picture}
-                          style={{ zIndex: 1000 - index }}
-                          key={item?._id}
+                      <div
+                        key={item?._id}
+                        className={OrderCardStyles.picture}
+                        style={{ zIndex: 1000 - index }}
+                      >
+                        <img
+                          className={OrderCardStyles.last}
+                          src={item?.image}
+                          alt="Картинка игредиента."
+                          width="112"
+                          height="56"
+                        />
+                        <span
+                          className={classNames(
+                            OrderCardStyles.count,
+                            "text text_type_digits-default"
+                          )}
                         >
-                          <img
-                            className={OrderCardStyles.last}
-                            src={item?.image}
-                            alt="Картинка игредиента."
-                            width="112"
-                            height="56"
-                          />
-                          <span
-                            className={classNames(
-                              OrderCardStyles.count,
-                              "text text_type_digits-default"
-                            )}
-                          >
-                            +{" "}
-                            {
-                              Array.from(new Set(orderIngredients)).slice(
-                                maxIngregientsLength
-                              ).length
-                            }
-                          </span>
-                        </div>
-                      </>
+                          +{" "}
+                          {
+                            Array.from(new Set(orderIngredients)).slice(
+                              maxIngregientsLength
+                            ).length
+                          }
+                        </span>
+                      </div>
                     );
                   }
                   return (
                     <div
                       className={OrderCardStyles.picture}
                       style={{ zIndex: 1000 - index }}
+                      key={item?._id}
                     >
                       <img
                         className={OrderCardStyles.image}

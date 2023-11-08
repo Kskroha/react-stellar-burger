@@ -10,7 +10,7 @@ interface IIngredientDetails {
 }
 
 const IngredientDetails: FC<IIngredientDetails> = ({ item }) => {
-  let { id } = useParams();
+  const { id } = useParams();
   const ingredients = useAppSelector(
     (state) => state.burgerIngredients.ingredients
   );

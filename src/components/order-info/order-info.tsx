@@ -1,48 +1,53 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 import classNames from "classnames";
 import OrderInfoStyles from "./order-info.module.css";
 import {
   CurrencyIcon,
   FormattedDate,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { TIngredient, TOrder } from "../../types/types";
-import { useAppSelector } from "../../services/hooks/hooks";
-import { useLocation, useParams } from "react-router-dom";
+import { TIngredient } from "../../types/types";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
+import { useLocation } from "react-router-dom";
+import { getOrder } from "../../services/actions/order-details";
 
 const OrderInfo: FC = () => {
-  let { id } = useParams();
   const location = useLocation();
+  const number = location.pathname.split("/").slice(-1).join("");
+  const dispatch = useAppDispatch();
 
-  const feedOrders: TOrder[] = useAppSelector((store) => store.wsFeed.orders);
-  const userOrders: TOrder[] = useAppSelector((store) => store.wsOrder.orders);
+  useEffect(() => {
+    dispatch(getOrder(number));
+  }, [dispatch, number]);
+
   const ingredients: TIngredient[] = useAppSelector(
     (state) => state.burgerIngredients.ingredients
   );
-
-  const currentOrder = useMemo(() => {
-    if (location.pathname.includes("feed")) {
-      return feedOrders.find((el) => el._id === id);
-    }
-    return userOrders.find((el) => el._id === id);
-  }, [feedOrders, userOrders, id, location.pathname]) as TOrder;
-
-  const orderIngredients = useMemo(
-    () =>
-      currentOrder?.ingredients.map((id) =>
-        ingredients?.find((item) => String(id) === String(item._id))
-      ),
-    [currentOrder?.ingredients, ingredients]
+  const currentOrder = useAppSelector(
+    (store) => store.orderDetails.currentOrder
   );
+
+  const currentInredients = useMemo(() => {
+    const orderIngredients: TIngredient[] = [];
+    currentOrder.ingredients?.forEach((id) => {
+      const newIngredient = ingredients.find(
+        (item) => String(id) === String(item._id)
+      ) as TIngredient;
+      orderIngredients.push(newIngredient);
+    });
+    return orderIngredients;
+  }, [currentOrder.ingredients, ingredients]);
 
   const countedIngredients: TIngredient[] = useMemo(
     () =>
-      orderIngredients?.reduce((newArr: any[], item) => {
+      currentInredients.reduce((newArr: any[], item) => {
         const newItem = {
           ...item,
           count: 1,
         };
         if (newArr.some((el) => el.name === item?.name)) {
-          const itemIndex: number = newArr.findIndex((el) => el.name === item?.name);
+          const itemIndex: number = newArr.findIndex(
+            (el) => el.name === item?.name
+          );
           newArr[itemIndex] = {
             ...item,
             count: (newArr[itemIndex].count += 1),
@@ -52,7 +57,7 @@ const OrderInfo: FC = () => {
         }
         return newArr;
       }, []),
-    [orderIngredients]
+    [currentInredients]
   );
 
   const countTotalPrice = (ingredients: TIngredient[]) =>
@@ -104,7 +109,7 @@ const OrderInfo: FC = () => {
         <ul className={OrderInfoStyles.list}>
           {countedIngredients?.map((item) => {
             return (
-              <li className={OrderInfoStyles.card}>
+              <li className={OrderInfoStyles.card} key={item._id}>
                 <div
                   className={OrderInfoStyles.picture}
                   style={{ zIndex: 10 }}
@@ -140,9 +145,7 @@ const OrderInfo: FC = () => {
             OrderInfoStyles.time,
             "text text_type_main-default text_color_inactive"
           )}
-        >
-          {getFormattedDate()}
-        </span>
+        >{getFormattedDate()}</span>
         <div className={OrderInfoStyles.price}>
           <span className="text text_type_digits-default">
             {countTotalPrice(countedIngredients)}

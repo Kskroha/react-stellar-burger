@@ -1,6 +1,6 @@
 import { getOrderRequest, sendOrderRequest } from "../api";
 import { AppDispatch } from "../../types";
-import { TIngredient } from "../../types/types";
+import { TIngredient, TOrder } from "../../types/types";
 import {
   SEND_ORDER_FAILED,
   SEND_ORDER_REQUEST,
@@ -17,7 +17,7 @@ export interface ISendOrderRequestAction {
 
 export interface ISendOrderSuccessAction {
   readonly type: typeof SEND_ORDER_SUCCESS;
-  order: any;
+  order: TOrder;
 }
 
 export interface ISendOrderFailedAction {
@@ -41,7 +41,7 @@ export const setOrderRequest = (): ISendOrderRequestAction => ({
   type: SEND_ORDER_REQUEST,
 });
 
-export const setOrderSuccess = (res: any): ISendOrderSuccessAction => ({
+export const setOrderSuccess = (res: {order: TOrder}): ISendOrderSuccessAction => ({
   type: SEND_ORDER_SUCCESS,
   order: res.order,
 });
@@ -63,7 +63,7 @@ export interface IGetOrderRequestAction {
 
 export interface IGetOrderSuccessAction {
   readonly type: typeof GET_CURRENT_ORDER_SUCCESS;
-  order: any;
+  orders: Array<TOrder>;
 }
 
 export interface IGetOrderFailedAction {
@@ -74,16 +74,16 @@ export const setGetOrderRequest = (): IGetOrderRequestAction => ({
   type: GET_CURRENT_ORDER_REQUEST,
 });
 
-export const setGetOrderSuccess = (res: any): IGetOrderSuccessAction => ({
+export const setGetOrderSuccess = (res: {orders: TOrder[]}): IGetOrderSuccessAction => ({
   type: GET_CURRENT_ORDER_SUCCESS,
-  order: res.order,
+  orders: res.orders,
 });
 
 export const setGetOrderFailed = (): IGetOrderFailedAction => ({
   type: GET_CURRENT_ORDER_FAILED,
 });
 
-export const getOrder = (orderNumber: number) => (dispatch: AppDispatch) => {
+export const getOrder = (orderNumber: string) => (dispatch: AppDispatch) => {
   dispatch(setGetOrderRequest());
   getOrderRequest(orderNumber)
     .then((res) => dispatch(setGetOrderSuccess(res)))

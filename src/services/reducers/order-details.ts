@@ -72,7 +72,7 @@ export const orderDetailsReducer = (state = initialState, action: TOrderDetailsA
     case GET_CURRENT_ORDER_SUCCESS: {
       return {
         ...state,
-        currentOrder: action.order,
+        currentOrder: action.orders[0],
         currentOrderRequest: false,
         isOpen: true,
       };

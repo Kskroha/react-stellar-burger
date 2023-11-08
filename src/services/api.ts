@@ -35,7 +35,7 @@ async function request(url: string, options?: RequestInit) {
   return checkResponse(res);
 }
 
-export async function getOrderRequest(orderNumber: number) {
+export async function getOrderRequest(orderNumber: string) {
   return await request(`orders/${orderNumber}`);
 }
 

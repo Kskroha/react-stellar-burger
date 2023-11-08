@@ -23,7 +23,7 @@ export const OrderStat: FC = () => {
           <h4 className={classNames(OrderStatStyles.title, "text text_type_main-medium")}>Готовы:</h4>
           <ul className={OrderStatStyles.orderList}>
             {readyOrders.slice(0,9).map((order) => (
-              <li className="text text_type_digits-default">{order.number}</li>
+              <li key={order._id} className="text text_type_digits-default">{order.number}</li>
             ))}
           </ul>
         </div>
@@ -31,7 +31,7 @@ export const OrderStat: FC = () => {
           <h4 className={classNames(OrderStatStyles.title, "text text_type_main-medium")}>В работе:</h4>
           <ul className={OrderStatStyles.orderList}>
             {pendingOrders.map((order) => (
-              <li className="text text_type_digits-default">{order.number}</li>
+              <li key={order._id} className="text text_type_digits-default">{order.number}</li>
             ))}
           </ul>
         </div>

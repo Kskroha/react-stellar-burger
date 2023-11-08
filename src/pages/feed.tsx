@@ -11,6 +11,7 @@ import { OrderStat } from "../components/order-stat/order-stat";
 
 export const Feed: FC = () => {
   const dispatch = useAppDispatch();
+  const { orders } = useAppSelector((store) => store.wsFeed);
 
   useEffect(() => {
     dispatch(wsFeedConnectionStart());
@@ -18,7 +19,6 @@ export const Feed: FC = () => {
       dispatch(wsFeedConnectionClosed());
     };
   }, [dispatch]);
-  const { orders } = useAppSelector((store) => store.wsFeed);
 
   return (
     <section className={FeedStyles.page}>
@@ -28,7 +28,7 @@ export const Feed: FC = () => {
           {orders &&
             orders.map((order) => {
               return (
-                <OrderCard order={order} statusShown={false} />
+                <OrderCard key={order._id} order={order} statusShown={false} />
               );
             })}
         </div>
