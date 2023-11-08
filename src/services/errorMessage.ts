@@ -1,4 +1,4 @@
-export default function getErrorMessage(err) {
+export default function getErrorMessage(err: string) {
   switch (err) {
     case "User already exists":
       return "Аккаунт с таким email уже существует";
@@ -7,6 +7,6 @@ export default function getErrorMessage(err) {
     case "email or password are incorrect":
       return "Проверьте email или пароль";
     default:
-      return "Что-то пошло не так. Повторите запрос"
+      return "Что-то пошло не так. Повторите запрос";
   }
-};
+}

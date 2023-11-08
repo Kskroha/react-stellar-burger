@@ -1,17 +1,32 @@
+import { TIngredient } from "../../types/types";
 import {
   ADD_ITEM,
   REMOVE_ITEM,
   MOVE_ITEM,
-  CLEAN_CONSTRUCTOR
+  CLEAN_CONSTRUCTOR,
 } from "../actions/burger-constructor";
 import update from "immutability-helper";
 
-const initialState = {
+interface IIninitialState {
+  draggedItems: TIngredient[] | [];
+  bun: TIngredient & any;
+}
+
+const initialState: IIninitialState = {
   draggedItems: [],
   bun: {},
 };
 
-export const burgerConstructorReducer = (state = initialState, action) => {
+export const burgerConstructorReducer = (
+  state = initialState,
+  action: {
+    item: never;
+    dragIndex: number;
+    hoverIndex: number;
+    type: any;
+    payload: any;
+  }
+) => {
   switch (action.type) {
     case ADD_ITEM: {
       if (action.payload.item.type === "bun") {

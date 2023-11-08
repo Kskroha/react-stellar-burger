@@ -8,27 +8,23 @@ import classNames from "classnames";
 import FormPageStyles from "./form.module.css";
 import { Link } from "react-router-dom";
 import { userLogin } from "../services/actions/user";
-import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "../services/hooks/useForm";
+import { useAppSelector, useAppDispatch } from "../services/hooks/hooks";
+import { useForm } from "../services/hooks/hooks";
 import getErrorMessage from "../services/errorMessage";
 
 export const LoginPage = () => {
-  const { requestFailed, errorMessage } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const { requestFailed, errorMessage } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const form = useForm({
     email: "",
     password: "",
   });
+  const { values } = form;
 
-  const onChange = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    form.handleChange(e);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    return dispatch(userLogin(form.values));
+    return dispatch(userLogin(values));
   };
 
   return (
@@ -43,15 +39,15 @@ export const LoginPage = () => {
       </h2>
       <form className={FormPageStyles.form} onSubmit={(e) => handleSubmit(e)}>
         <EmailInput
-          onChange={onChange}
-          value={form.values.email}
+          onChange={form.handleChange}
+          value={values.email || ""}
           name={"email"}
           isIcon={false}
           extraClass="mb-6"
         />
         <PasswordInput
-          onChange={onChange}
-          value={form.values.password}
+          onChange={form.handleChange}
+          value={values.password || ""}
           name={"password"}
           extraClass="mb-6"
         />
@@ -86,7 +82,11 @@ export const LoginPage = () => {
           Восстановить пароль
         </Link>
       </p>
-      {requestFailed && <span className="text text_type_main-default">{getErrorMessage(errorMessage)}</span>}
+      {requestFailed && (
+        <span className="text text_type_main-default">
+          {getErrorMessage(errorMessage)}
+        </span>
+      )}
     </div>
   );
 };

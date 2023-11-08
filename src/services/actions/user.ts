@@ -7,6 +7,8 @@ import {
   requestChange,
   reset,
 } from "../api";
+import { TInputValue } from "../../types/types";
+import { AppDispatch } from "../store";
 
 export const SET_AUTH_CHECKED = "SET_AUTH_CHECKED";
 export const SET_USER = "SET_USER";
@@ -15,18 +17,18 @@ export const RESET_SUCCESS = "RESET_SUCCESS";
 export const REQUEST_FAILED = "REQUEST_FAILED";
 export const CLEAN_STATE = "CLEAN_STATE";
 
-export const setAuthChecked = (value) => ({
+export const setAuthChecked = (value: boolean) => ({
   type: SET_AUTH_CHECKED,
   payload: value,
 });
 
-export const setUser = (user) => ({
+export const setUser = (user: TInputValue | null) => ({
   type: SET_USER,
   payload: user,
 });
 
 export const getUser = () => {
-  return (dispatch) => {
+  return (dispatch: AppDispatch) => {
     return getUserData()
       .then((res) => {
         dispatch(setUser(res.user));
@@ -40,7 +42,7 @@ export const getUser = () => {
   };
 };
 
-export const setError = (err) => ({
+export const setError = (err: any) => ({
   type: REQUEST_FAILED,
   payload: err.message,
 });
@@ -49,8 +51,8 @@ export const cleanState = () => ({
   type: CLEAN_STATE,
 });
 
-export const updateUserInfo = (userData) => {
-  return (dispatch) => {
+export const updateUserInfo = (userData: TInputValue) => {
+  return (dispatch: AppDispatch) => {
     return update(userData)
       .then((res) => {
         dispatch(setUser(res.user));
@@ -64,8 +66,8 @@ export const updateUserInfo = (userData) => {
   };
 };
 
-export const registerNewUser = (userData) => {
-  return (dispatch) => {
+export const registerNewUser = (userData: TInputValue) => {
+  return (dispatch: AppDispatch) => {
     return register(userData)
       .then((res) => {
         localStorage.setItem("accessToken", res.accessToken);
@@ -83,7 +85,7 @@ export const registerNewUser = (userData) => {
 };
 
 export const checkUserAuth = () => {
-  return (dispatch) => {
+  return (dispatch: any) => {
     if (localStorage.getItem("accessToken")) {
       dispatch(getUser())
         .catch(() => {
@@ -99,7 +101,7 @@ export const checkUserAuth = () => {
 };
 
 export const userLogout = () => {
-  return (dispatch) => {
+  return (dispatch: AppDispatch) => {
     return logout()
       .then(() => {
         localStorage.removeItem("accessToken");
@@ -115,8 +117,8 @@ export const userLogout = () => {
   };
 };
 
-export const userLogin = (userData) => {
-  return (dispatch) => {
+export const userLogin = (userData: TInputValue) => {
+  return (dispatch: AppDispatch) => {
     return login(userData)
       .then((res) => {
         localStorage.setItem("accessToken", res.accessToken);
@@ -133,8 +135,8 @@ export const userLogin = (userData) => {
   };
 };
 
-export const requestPasswordChange = (userEmail) => {
-  return (dispatch) => {
+export const requestPasswordChange = (userEmail: TInputValue) => {
+  return (dispatch: AppDispatch) => {
     return requestChange(userEmail)
       .then((res) => {
         dispatch({
@@ -151,9 +153,9 @@ export const requestPasswordChange = (userEmail) => {
   };
 };
 
-export const resetPassword = (userPassword) => {
-  return (dispatch) => {
-    return reset(userPassword)
+export const resetPassword = (userData: TInputValue) => {
+  return (dispatch: AppDispatch) => {
+    return reset(userData)
       .then(() => {
         dispatch({
           type: RESET_SUCCESS,

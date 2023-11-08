@@ -13,14 +13,14 @@ import {
 } from "../../pages/index";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../services/hooks/hooks";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route";
 import { checkUserAuth } from "../../services/actions/user";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 import { useNavigate } from "react-router-dom";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     dispatch(getIngredients());

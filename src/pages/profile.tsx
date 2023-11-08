@@ -6,17 +6,17 @@ import {
 import { NavLink, useOutlet } from "react-router-dom";
 import classNames from "classnames";
 import ProfilePageStyles from "./profile.module.css";
-import { useSelector, useDispatch } from "react-redux";
 import { updateUserInfo } from "../services/actions/user";
 import { userLogout } from "../services/actions/user";
-import { useForm } from "../services/hooks/useForm";
+import { useForm } from "../services/hooks/hooks";
 import getErrorMessage from "../services/errorMessage";
+import { useAppSelector, useAppDispatch } from "../services/hooks/hooks";
 
 export const ProfilePage = () => {
-  const { requestFailed, errorMessage } = useSelector((state) => state.user);
+  const { requestFailed, errorMessage } = useAppSelector((state) => state.user);
   const outlet = useOutlet();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
 
   const [isEdit, setIsEdit] = React.useState(false);
   const form = useForm({
@@ -25,12 +25,9 @@ export const ProfilePage = () => {
     password: "",
   });
 
-  const onChange = (e) => {
-    form.handleChange(e);
-    setIsEdit(true);
-  };
-  const onClick = (e) => {
-    e.preventDefault();
+  const { values } = form;
+
+  const onClick = () => {
     setIsEdit(false);
     form.setValues({
       name: user.name,
@@ -38,17 +35,17 @@ export const ProfilePage = () => {
       password: "",
     });
   };
-  const inputRef = React.useRef(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
+    setTimeout(() => inputRef.current?.focus(), 0);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    return dispatch(updateUserInfo(form));
+    return dispatch(updateUserInfo(values));
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     return dispatch(userLogout());
   };
@@ -101,8 +98,8 @@ export const ProfilePage = () => {
             <Input
               type={"text"}
               placeholder={"Имя"}
-              onChange={onChange}
-              value={form.values.name}
+              onChange={form.handleChange}
+              value={values.name || ""}
               name={"name"}
               error={false}
               ref={inputRef}
@@ -115,17 +112,17 @@ export const ProfilePage = () => {
             <Input
               type={"email"}
               placeholder={"E-mail"}
-              onChange={onChange}
+              onChange={form.handleChange}
               icon="EditIcon"
-              value={form.values.email}
+              value={values.email || ""}
               name={"email"}
               extraClass="mb-6"
             />
             <Input
               type={"password"}
-              onChange={onChange}
+              onChange={form.handleChange}
               placeholder={"Пароль"}
-              value={form.values.password}
+              value={values.password || ""}
               name={"password"}
               extraClass="mb-6"
               icon="EditIcon"
@@ -163,7 +160,11 @@ export const ProfilePage = () => {
           </span>
         </>
       )}
-      {requestFailed && <span className="text text_type_main-default">{getErrorMessage(errorMessage)}</span>}
+      {requestFailed && (
+        <span className="text text_type_main-default">
+          {getErrorMessage(errorMessage)}
+        </span>
+      )}
     </div>
   );
 };

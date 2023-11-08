@@ -1,21 +1,22 @@
-import React from "react";
+import { useEffect, FC, ReactNode } from "react";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import { createPortal } from "react-dom";
-import PropTypes from "prop-types";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalStyles from "./modal.module.css";
 import { CLOSE_MODAL } from "../../services/actions/order-details";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-function Modal(props) {
-  const modalRoot = document.getElementById("modal");
-  const { children, handleClose } = props;
+interface IModal {
+  children?: ReactNode;
+  handleClose?: () => void;
+}
 
+const Modal: FC<IModal> = ({ children, handleClose }) => {
+  const modalRoot = document.getElementById("modal") as HTMLElement;
   const dispatch = useDispatch();
-  const { orderNumber } = useSelector((state) => state.orderDetails);
 
-  React.useEffect(() => {
-    const onKeydown = ({ key }) => {
+  useEffect(() => {
+    const onKeydown = ({ key }: KeyboardEvent) => {
       if (key === "Escape") {
         onClose();
         return;
@@ -25,16 +26,16 @@ function Modal(props) {
     return () => document.removeEventListener("keydown", onKeydown);
   });
 
-  const onClose = (e) => {
+  const onClose = (
+    e?: React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLDivElement>
+  ) => {
     if (e) {
       e.stopPropagation();
     }
-    if (orderNumber !== 0) {
-      return dispatch({
-        type: CLOSE_MODAL,
-      });
-    }
     handleClose?.();
+    return dispatch({
+      type: CLOSE_MODAL,
+    });
   };
 
   return createPortal(
@@ -49,12 +50,6 @@ function Modal(props) {
     </>,
     modalRoot
   );
-}
-
-Modal.propTypes = {
-  onClose: PropTypes.func,
-  children: PropTypes.element,
-  header: PropTypes.string,
 };
 
 export default Modal;

@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+import { FC, useRef, useCallback } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useDispatch } from "react-redux";
 import {
@@ -11,11 +10,27 @@ import {
   MOVE_ITEM,
 } from "../../services/actions/burger-constructor";
 import ConstructorItemStyles from "./constructor-item.module.css";
+import { TIngredient } from "../../types/types";
 
-function ConstructorItem({ item, text, type, id, index }) {
+interface IConstructorItem {
+  item: TIngredient;
+  text?: string;
+  type?: "top" | "bottom" | undefined;
+  id?: string;
+  index?: number;
+  key?: string;
+}
+
+const ConstructorItem: FC<IConstructorItem> = ({
+  item,
+  text,
+  type,
+  id,
+  index,
+}) => {
   const dispatch = useDispatch();
 
-  const ref = React.useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop({
     accept: "card",
     collect(monitor) {
@@ -23,12 +38,12 @@ function ConstructorItem({ item, text, type, id, index }) {
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item, monitor) {
+    hover(item: any, monitor) {
       if (!ref.current) {
         return;
       }
       const dragIndex = item.index;
-      const hoverIndex = index;
+      const hoverIndex = index!;
       if (dragIndex === hoverIndex) {
         return;
       }
@@ -36,7 +51,7 @@ function ConstructorItem({ item, text, type, id, index }) {
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
       }
@@ -65,9 +80,10 @@ function ConstructorItem({ item, text, type, id, index }) {
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
 
-  const handleClick = React.useCallback(
-    (e) => {
-      if (e.target.tagName === "path") {
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      const element = e.target as HTMLElement;
+      if (element.tagName === "path") {
         return dispatch({ type: REMOVE_ITEM, item });
       }
     },
@@ -96,7 +112,7 @@ function ConstructorItem({ item, text, type, id, index }) {
     >
       <DragIcon type="primary" />
       <ConstructorElement
-        type={item.type}
+        type={type}
         isLocked={false}
         text={item.name}
         price={item.price}
@@ -104,14 +120,6 @@ function ConstructorItem({ item, text, type, id, index }) {
       />
     </div>
   );
-}
-
-ConstructorItem.propTypes = {
-  item: PropTypes.object,
-  text: PropTypes.string,
-  type: PropTypes.string,
-  id: PropTypes.string,
-  index: PropTypes.number,
 };
 
 export default ConstructorItem;

@@ -1,22 +1,27 @@
+import { TIngredient, TInputValue } from "../types/types";
+
 const PATH = "https://norma.nomoreparties.space/api";
 
-export const checkResponse = (res) =>
-  res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+export const checkResponse = (res: Response) =>
+  res.ok
+    ? res.json()
+    : res.json().then((err: { errorMessage: string }) => Promise.reject(err));
 
-const fetchWithRefresh = async (url, options) => {
+const fetchWithRefresh = async (url: string, options: RequestInit) => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);
-  } catch (err) {
+  } catch (err: any) {
     if (err.message === "jwt expired") {
-      const refreshData = await refreshToken(); //обновляем токен
+      const refreshData = await refreshToken();
       if (!refreshData.success) {
         return Promise.reject(refreshData);
       }
       localStorage.setItem("refreshToken", refreshData.refreshToken);
       localStorage.setItem("accessToken", refreshData.accessToken);
-      options.headers.authorization = refreshData.accessToken;
-      const res = await fetch(url, options); //повторяем запрос
+      const requestHeaders = new Headers(options.headers);
+      requestHeaders.set("Authorization", refreshData.accessToken);
+      const res = await fetch(url, options);
       return await checkResponse(res);
     } else {
       return Promise.reject(err);
@@ -24,16 +29,16 @@ const fetchWithRefresh = async (url, options) => {
   }
 };
 
-function request(url, options) {
+function request(url: string, options?: RequestInit) {
   const baseUrl = PATH;
-  return fetch(`${baseUrl}/${url}`, options).then(checkResponse)
-};
+  return fetch(`${baseUrl}/${url}`, options).then(checkResponse);
+}
 
 export async function getIngredientsRequest() {
   return await request("ingredients");
 }
 
-export async function sendOrderRequest(items) {
+export async function sendOrderRequest(items: TIngredient[]) {
   return await request("orders", {
     method: "POST",
     headers: {
@@ -45,7 +50,7 @@ export async function sendOrderRequest(items) {
   });
 }
 
-export async function register(userData) {
+export async function register(userData: TInputValue) {
   return await request("auth/register", {
     method: "POST",
     headers: {
@@ -68,22 +73,22 @@ export const refreshToken = () => {
 };
 
 export const getUserData = () => {
+  const requestHeaders: HeadersInit = new Headers();
+  requestHeaders.set("Content-Type", "application/json");
+  requestHeaders.set("Authorization", localStorage.getItem("accessToken")!);
   return fetchWithRefresh(`${PATH}/auth/user`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-      "authorization": localStorage.getItem("accessToken")
-    }
+    headers: requestHeaders,
   });
 };
 
-export const update = async (userData) => {
+export const update = async (userData: TInputValue) => {
+  const requestHeaders: HeadersInit = new Headers();
+  requestHeaders.set("Content-Type", "application/json");
+  requestHeaders.set("Authorization", localStorage.getItem("accessToken")!);
   return await request("auth/user", {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-      "authorization": localStorage.getItem("accessToken")
-    },
+    headers: requestHeaders,
     body: JSON.stringify(userData),
   });
 };
@@ -100,7 +105,7 @@ export const logout = async () => {
   });
 };
 
-export const login = async (userData) => {
+export const login = async (userData: TInputValue) => {
   return await request("auth/login", {
     method: "POST",
     headers: {
@@ -110,17 +115,17 @@ export const login = async (userData) => {
   });
 };
 
-export const requestChange = async (userEmail) => {
+export const requestChange = async (userData: TInputValue) => {
   return await request("password-reset", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    body: JSON.stringify(userEmail),
+    body: JSON.stringify(userData),
   });
 };
 
-export const reset = async (userData) => {
+export const reset = async (userData: TInputValue) => {
   return await request("password-reset/reset", {
     method: "POST",
     headers: {

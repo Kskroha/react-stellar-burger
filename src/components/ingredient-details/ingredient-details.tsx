@@ -1,22 +1,35 @@
-import React from "react";
+import { FC } from "react";
 import classNames from "classnames";
 import IngredientDetailsStyles from "./ingedient-details.module.css";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../services/hooks/hooks";
 import { useParams } from "react-router-dom";
+import { TIngredient } from "../../types/types";
 
-function IngredientDetails({ item }) {
+interface IIngredientDetails {
+  item?: TIngredient;
+}
+
+const IngredientDetails: FC<IIngredientDetails> = ({ item }) => {
   let { id } = useParams();
-  const ingredients = useSelector(
+  const ingredients = useAppSelector(
     (state) => state.burgerIngredients.ingredients
   );
 
   const linkItem =
-    ingredients.length && ingredients.find((item) => item._id === id);
-  const ingredient = item ? item : linkItem;
+    ingredients.length &&
+    ingredients.find((item: { _id: string | undefined }) => item._id === id);
+  const ingredient = item ?? linkItem;
 
   return (
     <div className={IngredientDetailsStyles.content}>
-      <span className={classNames(IngredientDetailsStyles.header, "text text_type_main-large mb-1 ml-10")}>Детали ингредиента</span>
+      <span
+        className={classNames(
+          IngredientDetailsStyles.header,
+          "text text_type_main-large mb-1 ml-10"
+        )}
+      >
+        Детали ингредиента
+      </span>
       <img
         className={IngredientDetailsStyles.image}
         src={linkItem.image_large}
@@ -71,6 +84,6 @@ function IngredientDetails({ item }) {
       </dl>
     </div>
   );
-}
+};
 
 export default IngredientDetails;
