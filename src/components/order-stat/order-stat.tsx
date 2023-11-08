@@ -22,7 +22,7 @@ export const OrderStat: FC = () => {
         <div className={OrderStatStyles.ready}>
           <h4 className={classNames(OrderStatStyles.title, "text text_type_main-medium")}>Готовы:</h4>
           <ul className={OrderStatStyles.orderList}>
-            {readyOrders.slice(0,9).map((order) => (
+            {readyOrders.slice(0,20).map((order) => (
               <li key={order._id} className="text text_type_digits-default">{order.number}</li>
             ))}
           </ul>

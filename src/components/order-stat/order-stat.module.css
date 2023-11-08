@@ -22,7 +22,7 @@
   list-style-type: none;
   padding: 0;
   column-count: 2;
-  max-height: 150px;
+  max-height: 300px;
 }
 
 .ready .orderList {
