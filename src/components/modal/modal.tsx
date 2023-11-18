@@ -3,8 +3,8 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 import { createPortal } from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalStyles from "./modal.module.css";
-import { CLOSE_MODAL } from "../../services/actions/order-details";
 import { useDispatch } from "react-redux";
+import { CLOSE_MODAL } from "../../services/constants";
 
 interface IModal {
   children?: ReactNode;

@@ -17,7 +17,7 @@ interface IIngredientElement {
 }
 
 const IngredientElement: FC<IIngredientElement> = ({ item }) => {
-  let location = useLocation();
+  const location = useLocation();
   const { image, name, price } = item;
 
   const [, dragRef] = useDrag({

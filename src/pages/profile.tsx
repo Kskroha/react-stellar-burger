@@ -16,12 +16,12 @@ export const ProfilePage = () => {
   const { requestFailed, errorMessage } = useAppSelector((state) => state.user);
   const outlet = useOutlet();
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.user["user"]);
 
   const [isEdit, setIsEdit] = React.useState(false);
   const form = useForm({
-    name: user.name,
-    email: user.email,
+    name: user["name"],
+    email: user["email"],
     password: "",
   });
 
@@ -30,8 +30,8 @@ export const ProfilePage = () => {
   const onClick = () => {
     setIsEdit(false);
     form.setValues({
-      name: user.name,
-      email: user.email,
+      name: user["name"],
+      email: user["email"],
       password: "",
     });
   };
@@ -54,6 +54,7 @@ export const ProfilePage = () => {
     <div className={ProfilePageStyles.container}>
       <div className={ProfilePageStyles.nav}>
         <NavLink
+          end
           to="/profile"
           className={classNames(
             ProfilePageStyles.link,
@@ -68,6 +69,7 @@ export const ProfilePage = () => {
           Профиль
         </NavLink>
         <NavLink
+          end
           to="/profile/orders"
           className={classNames(
             ProfilePageStyles.link,

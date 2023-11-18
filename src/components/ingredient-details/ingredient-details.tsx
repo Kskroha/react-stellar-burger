@@ -10,15 +10,15 @@ interface IIngredientDetails {
 }
 
 const IngredientDetails: FC<IIngredientDetails> = ({ item }) => {
-  let { id } = useParams();
+  const { id } = useParams();
   const ingredients = useAppSelector(
     (state) => state.burgerIngredients.ingredients
   );
 
-  const linkItem =
-    ingredients.length &&
-    ingredients.find((item: { _id: string | undefined }) => item._id === id);
-  const ingredient = item ?? linkItem;
+  const ingredient =
+    item ??
+    (ingredients.length &&
+      ingredients.find((item: { _id: string | undefined }) => item._id === id)) as TIngredient;
 
   return (
     <div className={IngredientDetailsStyles.content}>
@@ -32,7 +32,7 @@ const IngredientDetails: FC<IIngredientDetails> = ({ item }) => {
       </span>
       <img
         className={IngredientDetailsStyles.image}
-        src={linkItem.image_large}
+        src={ingredient.image_large}
         alt="Картинка ингредиента"
       ></img>
       <span

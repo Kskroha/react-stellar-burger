@@ -43,7 +43,7 @@ export const ForgotPasswordPage = () => {
       >
         Восстановление пароля
       </h2>
-      <form className={FormPageStyles.form} onSubmit={(e) => handleSubmit(e)}>
+      <form className={FormPageStyles.form} onSubmit={handleSubmit}>
         <EmailInput
           onChange={form.handleChange}
           value={values.email || ""}

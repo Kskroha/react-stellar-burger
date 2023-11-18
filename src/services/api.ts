@@ -29,9 +29,14 @@ const fetchWithRefresh = async (url: string, options: RequestInit) => {
   }
 };
 
-function request(url: string, options?: RequestInit) {
+async function request(url: string, options?: RequestInit) {
   const baseUrl = PATH;
-  return fetch(`${baseUrl}/${url}`, options).then(checkResponse);
+  const res = await fetch(`${baseUrl}/${url}`, options);
+  return checkResponse(res);
+}
+
+export async function getOrderRequest(orderNumber: string) {
+  return await request(`orders/${orderNumber}`);
 }
 
 export async function getIngredientsRequest() {
@@ -43,6 +48,7 @@ export async function sendOrderRequest(items: TIngredient[]) {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
+      "Authorization": localStorage.getItem("accessToken")!,
     },
     body: JSON.stringify({
       ingredients: items.map((item) => item._id),
@@ -72,7 +78,7 @@ export const refreshToken = () => {
   });
 };
 
-export const getUserData = () => {
+export const getUserData = (): Promise<void> => {
   const requestHeaders: HeadersInit = new Headers();
   requestHeaders.set("Content-Type", "application/json");
   requestHeaders.set("Authorization", localStorage.getItem("accessToken")!);
