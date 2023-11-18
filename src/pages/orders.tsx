@@ -6,12 +6,11 @@ import {
   wsOrdersConnectionClosed,
   wsOrdersConnectionStart,
 } from "../services/actions/ws-orders";
-import { TOrder } from "../types/types";
 import OrderCard from "../components/order-card/order-card";
 
 export const OrdersPage = () => {
   const dispatch = useAppDispatch();
-  const orders: TOrder[] = useAppSelector((store) => store.wsOrder.orders);
+  const orders = useAppSelector((store) => store.wsOrder.orders);
   useEffect(() => {
     dispatch(wsOrdersConnectionStart());
     return () => {

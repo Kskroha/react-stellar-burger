@@ -21,7 +21,7 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
   const ingredients: TIngredient[] = useAppSelector(
     (state) => state.burgerIngredients.ingredients
   );
-  const maxIngregientsLength = 5;
+  const maxIngredientsLength = 5;
 
   const orderIngredients = useMemo(
     () =>
@@ -42,6 +42,20 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
     const dateFromServer = createdAt;
     return <FormattedDate date={new Date(dateFromServer)} />;
   };
+
+  const showOrderStatus = (status: string) => {
+    switch (status) {
+      case "done":
+        return "Выполнен";
+      case "pending":
+        return "Готовится";
+      case "created":
+        return "Создан";
+      default:
+        return "Выполнен";
+    }
+  };
+
   return (
     <Link
       to={`${path}/${order.number}`}
@@ -73,17 +87,11 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
               "text text_type_main-default"
             )}
           >
-            {order.status === "done"
-              ? "Выполнен"
-              : order.status === "pending"
-              ? "Готовится"
-              : order.status === "created"
-              ? "Создан"
-              : "Выполнен"}
+            {showOrderStatus(order.status)}
           </span>
         )}
         <div className={OrderCardStyles.pictures}>
-          {orderIngredients.length < maxIngregientsLength
+          {orderIngredients.length < maxIngredientsLength
             ? Array.from(new Set(orderIngredients)).map((item, index) => (
                 <div
                   key={item?._id}
@@ -96,13 +104,14 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
                     alt="Картинка игредиента."
                     width="112"
                     height="56"
+                    loading="lazy"
                   />
                 </div>
               ))
             : Array.from(new Set(orderIngredients))
-                .slice(0, maxIngregientsLength + 1)
+                .slice(0, maxIngredientsLength + 1)
                 .map((item, index) => {
-                  if (index === maxIngregientsLength) {
+                  if (index === maxIngredientsLength) {
                     return (
                       <div
                         key={item?._id}
@@ -115,6 +124,7 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
                           alt="Картинка игредиента."
                           width="112"
                           height="56"
+                          loading="lazy"
                         />
                         <span
                           className={classNames(
@@ -125,7 +135,7 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
                           +{" "}
                           {
                             Array.from(new Set(orderIngredients)).slice(
-                              maxIngregientsLength
+                              maxIngredientsLength
                             ).length
                           }
                         </span>
@@ -144,6 +154,7 @@ const OrderCard: FC<IOrderCard> = ({ order, statusShown }) => {
                         alt="Картинка игредиента."
                         width="112"
                         height="56"
+                        loading="lazy"
                       />
                     </div>
                   );

@@ -4,9 +4,9 @@ import OrderStatStyles from "./order-stat.module.css";
 import { useAppSelector } from "../../services/hooks/hooks";
 
 export const OrderStat: FC = () => {
-  const { orders } = useAppSelector((store) => store.wsFeed);
-  const { total } = useAppSelector((store) => store.wsFeed);
-  const { totalToday } = useAppSelector((store) => store.wsFeed);
+  const orders = useAppSelector((store) => store.wsFeed.orders);
+  const total = useAppSelector((store) => store.wsFeed.total);
+  const totalToday = useAppSelector((store) => store.wsFeed.totalToday);
 
   const readyOrders = useMemo(() => {
     return orders.filter((order) => order.status === "done");
