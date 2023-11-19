@@ -109,6 +109,7 @@ const ConstructorItem: FC<IConstructorItem> = ({
       data-handler-id={handlerId}
       className={ConstructorItemStyles.ingredient}
       onClick={handleClick}
+      data-cy="constructor-item"
     >
       <DragIcon type="primary" />
       <ConstructorElement

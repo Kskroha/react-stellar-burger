@@ -8,7 +8,7 @@ const OrderDetails: FC = () => {
   const { orderNumber } = useAppSelector((state) => state.orderDetails);
 
   return (
-    <div className={classNames(OrderDetailsStyles.content, "pt-20")}>
+    <div className={classNames(OrderDetailsStyles.content, "pt-20")} data-cy="order-modal">
       <span
         className={classNames(
           OrderDetailsStyles.order,

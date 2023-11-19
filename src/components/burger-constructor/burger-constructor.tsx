@@ -77,7 +77,7 @@ function BurgerConstructor() {
   };
 
   return (
-    <section ref={dropTarget}>
+    <section ref={dropTarget} data-cy="constructor">
       <form action="#" method="post" onSubmit={(e) => handleSubmit(e)}>
         <div className={BurgerConstructorStyles.container}>
           {Object.keys(bun).length ? (
@@ -89,6 +89,7 @@ function BurgerConstructor() {
           )}
           <div
             className={BurgerConstructorStyles.constructor as unknown as string}
+            data-cy="constructor-items"
           >
             {draggedItems &&
               draggedItems.map((item, index) => (
@@ -115,6 +116,7 @@ function BurgerConstructor() {
             disabled={disabled!}
             className={BurgerConstructorStyles.submit}
             type="submit"
+            data-cy="order-button"
           >
             <span className="text text_type_main-default">Оформить заказ</span>
           </button>

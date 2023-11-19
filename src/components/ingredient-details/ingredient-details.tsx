@@ -21,7 +21,7 @@ const IngredientDetails: FC<IIngredientDetails> = ({ item }) => {
       ingredients.find((item: { _id: string | undefined }) => item._id === id)) as TIngredient;
 
   return (
-    <div className={IngredientDetailsStyles.content}>
+    <div className={IngredientDetailsStyles.content} data-cy="ingredient-modal">
       <span
         className={classNames(
           IngredientDetailsStyles.header,

@@ -73,7 +73,7 @@ const OrderInfo: FC = () => {
   };
 
   return (
-    <div className={OrderInfoStyles.container}>
+    <div className={OrderInfoStyles.container} data-cy="order-modal">
       <span
         className={classNames(
           OrderInfoStyles.number,

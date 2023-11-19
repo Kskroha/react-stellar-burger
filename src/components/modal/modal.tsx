@@ -42,7 +42,7 @@ const Modal: FC<IModal> = ({ children, handleClose }) => {
     <>
       <ModalOverlay onClose={onClose} />
       <div className={ModalStyles.window} onClick={(e) => e.stopPropagation()}>
-        <button className={ModalStyles.button} type="button" onClick={onClose}>
+        <button className={ModalStyles.button} type="button" onClick={onClose} data-cy="close-button">
           <CloseIcon type="primary" />
         </button>
         <div className={ModalStyles.content}>{children}</div>
