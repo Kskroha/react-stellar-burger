@@ -9,7 +9,7 @@ import {
   GET_CURRENT_ORDER_FAILED,
   GET_CURRENT_ORDER_REQUEST,
   GET_CURRENT_ORDER_SUCCESS,
-} from "../constants";
+} from "../constants/constants";
 
 export interface ISendOrderRequestAction {
   readonly type: typeof SEND_ORDER_REQUEST;

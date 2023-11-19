@@ -8,7 +8,7 @@ import {
   GET_CURRENT_ORDER_FAILED,
   GET_CURRENT_ORDER_REQUEST,
   GET_CURRENT_ORDER_SUCCESS,
-} from "../constants";
+} from "../constants/constants";
 
 type TOrderDetailsInitialState = {
   currentOrder: TOrder;
@@ -20,7 +20,7 @@ type TOrderDetailsInitialState = {
   isOpen: boolean,
 };
 
-const initialState: TOrderDetailsInitialState = {
+export const initialState: TOrderDetailsInitialState = {
   currentOrder: {} as TOrder,
   currentOrderRequest: false,
   currentOrderFailed: false,

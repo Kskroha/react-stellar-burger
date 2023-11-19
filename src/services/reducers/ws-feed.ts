@@ -5,7 +5,7 @@ import {
   WS_FEED_CONNECTION_ERROR,
   WS_FEED_CONNECTION_CLOSED,
   WS_FEED_GET_MESSAGE,
-} from '../constants';
+} from '../constants/constants';
 
 type TInitialState = {
   wsConnected: boolean,
@@ -15,7 +15,7 @@ type TInitialState = {
   error: MessageEvent | null,
 };
 
-const initialState: TInitialState = {
+export const initialState: TInitialState = {
   wsConnected: false,
   orders: [],
   total: 0,

@@ -1,4 +1,5 @@
 import { orderDetailsReducer } from "./order-details";
+import { initialState } from "./order-details";
 import {
   SEND_ORDER_REQUEST,
   SEND_ORDER_SUCCESS,
@@ -7,30 +8,20 @@ import {
   GET_CURRENT_ORDER_FAILED,
   GET_CURRENT_ORDER_REQUEST,
   GET_CURRENT_ORDER_SUCCESS,
-} from "../constants";
-
-const state = {
-  currentOrder: {},
-  currentOrderRequest: false,
-  currentOrderFailed: false,
-  orderNumber: 0,
-  orderRequest: false,
-  orderFailed: false,
-  isOpen: false,
-};
+} from "../constants/constants";
 
 describe("orderDetailsReducer", () => {
   it("should return the initial state", () => {
-    expect(orderDetailsReducer(undefined, {})).toEqual(state);
+    expect(orderDetailsReducer(undefined, {})).toEqual(initialState);
   });
 
   it("should handle SEND_ORDER_REQUEST", () => {
     expect(
-      orderDetailsReducer(state, {
+      orderDetailsReducer(initialState, {
         type: SEND_ORDER_REQUEST,
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       orderRequest: true,
       orderFailed: false,
     });
@@ -38,12 +29,12 @@ describe("orderDetailsReducer", () => {
 
   it("should handle SEND_ORDER_SUCCESS", () => {
     expect(
-      orderDetailsReducer(state, {
+      orderDetailsReducer(initialState, {
         type: SEND_ORDER_SUCCESS,
         order: { number: 2754 },
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       orderNumber: 2754,
       orderRequest: false,
       isOpen: true,
@@ -52,22 +43,22 @@ describe("orderDetailsReducer", () => {
 
   it("should handle SEND_ORDER_FAILED", () => {
     expect(
-      orderDetailsReducer(state, {
+      orderDetailsReducer(initialState, {
         type: SEND_ORDER_FAILED,
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       orderFailed: true,
     });
   });
 
   it("should handle CLOSE_MODAL", () => {
     expect(
-      orderDetailsReducer(state, {
+      orderDetailsReducer(initialState, {
         type: CLOSE_MODAL,
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       isOpen: false,
       orderNumber: 0,
       orderRequest: false,
@@ -77,11 +68,11 @@ describe("orderDetailsReducer", () => {
 
   it("should handle GET_CURRENT_ORDER_REQUEST", () => {
     expect(
-      orderDetailsReducer(state, {
+      orderDetailsReducer(initialState, {
         type: GET_CURRENT_ORDER_REQUEST,
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       currentOrderRequest: true,
       currentOrderFailed: false,
     });
@@ -89,12 +80,12 @@ describe("orderDetailsReducer", () => {
 
   it("should handle GET_CURRENT_ORDER_SUCCESS", () => {
     expect(
-      orderDetailsReducer(state, {
+      orderDetailsReducer(initialState, {
         type: GET_CURRENT_ORDER_SUCCESS,
         orders: [{ id: 1 }],
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       currentOrder: { id: 1 },
       currentOrderRequest: false,
       isOpen: true,
@@ -103,11 +94,11 @@ describe("orderDetailsReducer", () => {
 
   it("should handle GET_CURRENT_ORDER_FAILED", () => {
     expect(
-      orderDetailsReducer(state, {
+      orderDetailsReducer(initialState, {
         type: GET_CURRENT_ORDER_FAILED,
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       currentOrderFailed: true,
     });
   });

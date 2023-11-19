@@ -1,31 +1,24 @@
 import { wsFeedReducer } from "./ws-feed";
+import { initialState } from "./ws-feed";
 import {
   WS_FEED_CONNECTION_SUCCESS,
   WS_FEED_CONNECTION_ERROR,
   WS_FEED_CONNECTION_CLOSED,
   WS_FEED_GET_MESSAGE,
-} from "../constants";
-
-const state = {
-  wsConnected: false,
-  orders: [],
-  total: 0,
-  totalToday: 0,
-  error: null,
-};
+} from "../constants/constants";
 
 describe("wsFeedReducer", () => {
   it("should return the initial state", () => {
-    expect(wsFeedReducer(undefined, {})).toEqual(state);
+    expect(wsFeedReducer(undefined, {})).toEqual(initialState);
   });
 
   it("should handle WS_FEED_CONNECTION_SUCCESS", () => {
     expect(
-      wsFeedReducer(state, {
+      wsFeedReducer(initialState, {
         type: WS_FEED_CONNECTION_SUCCESS,
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       wsConnected: true,
       error: null,
     });
@@ -33,12 +26,12 @@ describe("wsFeedReducer", () => {
 
   it("should handle WS_FEED_CONNECTION_ERROR", () => {
     expect(
-      wsFeedReducer(state, {
+      wsFeedReducer(initialState, {
         type: WS_FEED_CONNECTION_ERROR,
         payload: { message: "connection is closed" },
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       wsConnected: false,
       error: { message: "connection is closed" },
     });
@@ -46,11 +39,11 @@ describe("wsFeedReducer", () => {
 
   it("should handle WS_FEED_CONNECTION_CLOSED", () => {
     expect(
-      wsFeedReducer(state, {
+      wsFeedReducer(initialState, {
         type: WS_FEED_CONNECTION_CLOSED,
       })
     ).toEqual({
-      ...state,
+      ...initialState,
       wsConnected: false,
       error: null,
     });
@@ -58,7 +51,7 @@ describe("wsFeedReducer", () => {
 
   it("should handle WS_FEED_GET_MESSAGE", () => {
     expect(
-      wsFeedReducer(state, {
+      wsFeedReducer(initialState, {
         type: WS_FEED_GET_MESSAGE,
         payload: {
           orders: [{id: 1}, {id: 2}],
@@ -67,7 +60,7 @@ describe("wsFeedReducer", () => {
         }
       })
     ).toEqual({
-      ...state,
+      ...initialState,
         orders: [{id: 1}, {id: 2}],
         total: 7600,
         totalToday: 25,

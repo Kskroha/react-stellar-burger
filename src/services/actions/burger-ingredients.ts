@@ -3,7 +3,7 @@ import {
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
-} from "../constants";
+} from "../constants/constants";
 import { getIngredientsRequest } from "../api";
 import { TIngredient } from "../../types/types";
 

@@ -16,7 +16,7 @@ import {
   RESET_SUCCESS,
   SET_AUTH_CHECKED,
   SET_USER,
-} from "../constants";
+} from "../constants/constants";
 
 export interface ISetAuthCheckedAction {
   readonly type: typeof SET_AUTH_CHECKED;

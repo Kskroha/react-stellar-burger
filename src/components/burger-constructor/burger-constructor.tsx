@@ -4,7 +4,7 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import BurgerConstructorStyles from "./burger-constructor.module.css";
 import { useDrop } from "react-dnd";
 import { sendOrder } from "../../services/actions/order-details";
-import { ADD_ITEM, CLEAN_CONSTRUCTOR } from "../../services/constants";
+import { ADD_ITEM, CLEAN_CONSTRUCTOR } from "../../services/constants/constants";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useNavigate } from "react-router-dom";

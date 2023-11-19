@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalStyles from "./modal.module.css";
 import { useDispatch } from "react-redux";
-import { CLOSE_MODAL } from "../../services/constants";
+import { CLOSE_MODAL } from "../../services/constants/constants";
 
 interface IModal {
   children?: ReactNode;

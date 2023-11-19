@@ -5,7 +5,7 @@ import {
   REMOVE_ITEM,
   MOVE_ITEM,
   CLEAN_CONSTRUCTOR,
-} from "../constants";
+} from "../constants/constants";
 import update from "immutability-helper";
 
 type TConstructorInitialState = {
@@ -13,7 +13,7 @@ type TConstructorInitialState = {
   bun: TIngredient;
 };
 
-const initialState: TConstructorInitialState = {
+export const initialState: TConstructorInitialState = {
   draggedItems: [],
   bun: {} as TIngredient,
 };
@@ -38,7 +38,7 @@ export const burgerConstructorReducer = (
         ...state,
         draggedItems: [
           ...state.draggedItems,
-          { ...action.payload.item, uniqueId: action.payload.item.uniqueId },
+          { ...action.payload.item, uniqueId: action.payload.uniqueId },
         ],
       };
     }

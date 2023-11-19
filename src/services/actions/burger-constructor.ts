@@ -1,4 +1,4 @@
-import { ADD_ITEM, REMOVE_ITEM, MOVE_ITEM, CLEAN_CONSTRUCTOR } from "../constants";
+import { ADD_ITEM, REMOVE_ITEM, MOVE_ITEM, CLEAN_CONSTRUCTOR } from "../constants/constants";
 import { TIngredient } from "../../types/types";
 
 export interface IAddItemAction {

@@ -4,10 +4,7 @@ import {
   ConstructorElement,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import {
-  REMOVE_ITEM,
-  MOVE_ITEM,
-} from "../../services/constants";
+import { REMOVE_ITEM, MOVE_ITEM } from "../../services/constants/constants";
 import ConstructorItemStyles from "./constructor-item.module.css";
 import { TIngredient } from "../../types/types";
 import { useAppDispatch } from "../../services/hooks/hooks";
@@ -91,17 +88,15 @@ const ConstructorItem: FC<IConstructorItem> = ({
   );
 
   return item.type === "bun" ? (
-    <>
-      <div className={ConstructorItemStyles.bun}>
-        <ConstructorElement
-          type={type}
-          isLocked={true}
-          text={item.name + ` (${text})`}
-          price={item.price}
-          thumbnail={item.image}
-        />
-      </div>
-    </>
+    <div className={ConstructorItemStyles.bun}>
+      <ConstructorElement
+        type={type}
+        isLocked={true}
+        text={item.name + ` (${text})`}
+        price={item.price}
+        thumbnail={item.image}
+      />
+    </div>
   ) : (
     <div
       ref={ref}

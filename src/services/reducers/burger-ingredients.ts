@@ -4,7 +4,7 @@ import {
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
   GET_INGREDIENTS_FAILED,
-} from "../constants";
+} from "../constants/constants";
 
 type TIngredientsInitialState = {
   ingredients: TIngredient[];
@@ -12,7 +12,7 @@ type TIngredientsInitialState = {
   ingredientsFailed: boolean,
 }
 
-const initialState: TIngredientsInitialState = {
+export const initialState: TIngredientsInitialState = {
   ingredients: [],
   ingredientsRequest: false,
   ingredientsFailed: false,

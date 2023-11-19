@@ -5,7 +5,7 @@ import {
   WS_FEED_CONNECTION_ERROR,
   WS_FEED_CONNECTION_CLOSED,
   WS_FEED_GET_MESSAGE
-} from '../constants';
+} from '../constants/constants';
 
 export interface IWsFeedConnectionStart {
   readonly type: typeof WS_FEED_CONNECTION_START

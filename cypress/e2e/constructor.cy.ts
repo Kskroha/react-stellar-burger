@@ -11,7 +11,7 @@ describe("works successfully", () => {
     );
     window.localStorage.setItem("accessToken", "test-accessToken");
 
-    cy.visit("http://localhost:3000");
+    cy.visit("/");
     cy.contains("Соберите бургер");
   });
 
@@ -23,18 +23,20 @@ describe("works successfully", () => {
     );
 
     //закрытие модального окна с информацией об игредиенте
-    cy.get('[data-cy="close-button"]').click();
-    cy.get('[data-cy="close-button"]').should("not.exist");
+    cy.get('[data-cy="close-button"]').as('closeButton');
+    cy.get("@closeButton").click();
+    cy.get("@closeButton").should("not.exist");
 
     //добавление ингредиентов в конструктор
     cy.get('[alt="Краторная булка N-200i"]').trigger("dragstart");
-    cy.get('[data-cy="constructor"]').trigger("drop");
+    cy.get('[data-cy="constructor"]').as('constructor');
+    cy.get('@constructor').trigger("drop");
     cy.get('[alt="Биокотлета из марсианской Магнолии"]').trigger("dragstart");
-    cy.get('[data-cy="constructor"]').trigger("drop");
+    cy.get('@constructor').trigger("drop");
     cy.get('[alt="Соус с шипами Антарианского плоскоходца"]').trigger(
       "dragstart"
     );
-    cy.get('[data-cy="constructor"]').trigger("drop");
+    cy.get('@constructor').trigger("drop");
 
     //удаление ингредиента из конструктора
     cy.get('[data-cy="constructor-item"]').eq(0).find("svg").eq(2).click();
@@ -45,7 +47,7 @@ describe("works successfully", () => {
     cy.get('[data-cy="order-modal"]').contains("идентификатор заказа");
 
     //закрытие модального окна с номером заказа
-    cy.get('[data-cy="close-button"]').click();
-    cy.get('[data-cy="close-button"]').should("not.exist");
+    cy.get("@closeButton").click();
+    cy.get("@closeButton").should("not.exist");
   });
 });
