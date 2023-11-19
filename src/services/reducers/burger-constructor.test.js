@@ -6,7 +6,7 @@ import {
   MOVE_ITEM,
   CLEAN_CONSTRUCTOR,
 } from "../constants/constants";
-import { BUN_CRATER, BUN_FLUORESCENT, INGREDIENT_MAIN, INGREDIENT_SAUCE, TEST_BUN, TEST_INGREDIENT } from "../constants/tests";
+import { BUN_CRATER, BUN_FLUORESCENT, INGREDIENT_MAIN, INGREDIENT_SAUCE, TEST_BUN} from "../constants/tests";
 
 describe("burgerConstructorReducer", () => {
   it("should return the initial state", () => {
