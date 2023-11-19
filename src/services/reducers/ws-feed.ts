@@ -1,6 +1,5 @@
 import { TFeedActions } from '../actions/ws-feed';
 import { TOrder } from '../../types/types';
-
 import {
   WS_FEED_CONNECTION_SUCCESS,
   WS_FEED_CONNECTION_ERROR,

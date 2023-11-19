@@ -20,9 +20,16 @@ function BurgerConstructor() {
     (state) => state.burgerConstructor.draggedItems
   );
   const bun: TIngredient = useAppSelector((state) => state.burgerConstructor.bun);
-  const { orderRequest, isOpen, orderNumber } = useAppSelector(
-    (state) => state.orderDetails
+  const orderRequest = useAppSelector(
+    (state) => state.orderDetails.orderRequest
   );
+  const isOpen = useAppSelector(
+    (state) => state.orderDetails.isOpen
+  );
+  const orderNumber = useAppSelector(
+    (state) => state.orderDetails.orderNumber
+  );
+
   const user = useAppSelector((state) => state.user["user"]);
 
   React.useEffect(() => {

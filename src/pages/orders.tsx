@@ -26,7 +26,7 @@ export const OrdersPage = () => {
         )}
       >
         {orders &&
-          orders.map((order) => {
+          orders.slice().reverse().map((order) => {
             return (
               <OrderCard
                 order={order}

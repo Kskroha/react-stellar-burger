@@ -1,6 +1,5 @@
 import { TOrdersActions } from '../actions/ws-orders';
 import { TOrder } from '../../types/types';
-
 import {
   WS_ORDERS_CONNECTION_SUCCESS,
   WS_ORDERS_CONNECTION_ERROR,

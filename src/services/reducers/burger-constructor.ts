@@ -38,7 +38,7 @@ export const burgerConstructorReducer = (
         ...state,
         draggedItems: [
           ...state.draggedItems,
-          { ...action.payload.item, uniqueId: action.payload.uniqueId },
+          { ...action.payload.item, uniqueId: action.payload.item.uniqueId },
         ],
       };
     }
