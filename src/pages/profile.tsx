@@ -25,8 +25,6 @@ export const ProfilePage = () => {
     password: "",
   });
 
-  const { values } = form;
-
   const onClick = () => {
     setIsEdit(false);
     form.setValues({
@@ -42,12 +40,16 @@ export const ProfilePage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    return dispatch(updateUserInfo(values));
+    return dispatch(updateUserInfo(form.values));
   };
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     return dispatch(userLogout());
+  };
+
+  const handleBlur = () => {
+    setIsEdit(true);
   };
 
   return (
@@ -100,8 +102,9 @@ export const ProfilePage = () => {
             <Input
               type={"text"}
               placeholder={"Имя"}
+              onBlur={handleBlur}
               onChange={form.handleChange}
-              value={values.name || ""}
+              value={form.values.name || ""}
               name={"name"}
               error={false}
               ref={inputRef}
@@ -116,7 +119,7 @@ export const ProfilePage = () => {
               placeholder={"E-mail"}
               onChange={form.handleChange}
               icon="EditIcon"
-              value={values.email || ""}
+              value={form.values.email || ""}
               name={"email"}
               extraClass="mb-6"
             />
@@ -124,7 +127,7 @@ export const ProfilePage = () => {
               type={"password"}
               onChange={form.handleChange}
               placeholder={"Пароль"}
-              value={values.password || ""}
+              value={form.values.password || ""}
               name={"password"}
               extraClass="mb-6"
               icon="EditIcon"
