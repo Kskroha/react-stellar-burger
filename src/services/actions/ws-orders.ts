@@ -5,7 +5,7 @@ import {
   WS_ORDERS_CONNECTION_ERROR,
   WS_ORDERS_CONNECTION_CLOSED,
   WS_ORDERS_GET_MESSAGE
-} from '../constants';
+} from '../constants/constants';
 
 export interface IWsOrdersConnectionStart {
   readonly type: typeof WS_ORDERS_CONNECTION_START

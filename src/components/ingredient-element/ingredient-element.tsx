@@ -41,7 +41,7 @@ const IngredientElement: FC<IIngredientElement> = ({ item }) => {
       state={{ background: location }}
       className={IngredientElementStyles.link}
     >
-      <li ref={dragRef} className={IngredientElementStyles.card} key={item._id}>
+      <li ref={dragRef} className={IngredientElementStyles.card} key={item._id} data-cy="ingredient-element">
         <img
           className={classNames(IngredientElementStyles.image, "mb-2")}
           src={image}

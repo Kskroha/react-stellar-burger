@@ -21,7 +21,7 @@ import { OrdersPage } from "../../pages/orders";
 import Feed from "../../pages/feed";
 import OrderInfo from "../order-info/order-info";
 import { useEffect } from "react";
-import { CLOSE_MODAL } from "../../services/constants";
+import { CLOSE_MODAL } from "../../services/constants/constants";
 
 function App() {
   const dispatch = useAppDispatch();

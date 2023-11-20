@@ -20,7 +20,7 @@ export const socketMiddleware = (wsUrl: string, wsActions: TWSActions, isAuth: b
 			}
 
 			if (socket) {
-				if (type === onClose) {
+				if (type === onClose && socket.readyState === 1) {
           socket.close();
         }
 

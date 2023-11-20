@@ -4,7 +4,7 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import BurgerConstructorStyles from "./burger-constructor.module.css";
 import { useDrop } from "react-dnd";
 import { sendOrder } from "../../services/actions/order-details";
-import { ADD_ITEM, CLEAN_CONSTRUCTOR } from "../../services/constants";
+import { ADD_ITEM, CLEAN_CONSTRUCTOR } from "../../services/constants/constants";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useNavigate } from "react-router-dom";
@@ -20,9 +20,16 @@ function BurgerConstructor() {
     (state) => state.burgerConstructor.draggedItems
   );
   const bun: TIngredient = useAppSelector((state) => state.burgerConstructor.bun);
-  const { orderRequest, isOpen, orderNumber } = useAppSelector(
-    (state) => state.orderDetails
+  const orderRequest = useAppSelector(
+    (state) => state.orderDetails.orderRequest
   );
+  const isOpen = useAppSelector(
+    (state) => state.orderDetails.isOpen
+  );
+  const orderNumber = useAppSelector(
+    (state) => state.orderDetails.orderNumber
+  );
+
   const user = useAppSelector((state) => state.user["user"]);
 
   React.useEffect(() => {
@@ -70,7 +77,7 @@ function BurgerConstructor() {
   };
 
   return (
-    <section ref={dropTarget}>
+    <section ref={dropTarget} data-cy="constructor">
       <form action="#" method="post" onSubmit={(e) => handleSubmit(e)}>
         <div className={BurgerConstructorStyles.container}>
           {Object.keys(bun).length ? (
@@ -82,6 +89,7 @@ function BurgerConstructor() {
           )}
           <div
             className={BurgerConstructorStyles.constructor as unknown as string}
+            data-cy="constructor-items"
           >
             {draggedItems &&
               draggedItems.map((item, index) => (
@@ -108,6 +116,7 @@ function BurgerConstructor() {
             disabled={disabled!}
             className={BurgerConstructorStyles.submit}
             type="submit"
+            data-cy="order-button"
           >
             <span className="text text_type_main-default">Оформить заказ</span>
           </button>

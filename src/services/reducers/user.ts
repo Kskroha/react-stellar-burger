@@ -7,7 +7,7 @@ import {
   RESET_SUCCESS,
   REQUEST_FAILED,
   CLEAN_STATE,
-} from "../constants";
+} from "../constants/constants";
 
 type TUserInitialState = {
   user: null | TUser,

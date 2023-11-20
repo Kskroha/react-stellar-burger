@@ -13,7 +13,7 @@ import {
   WS_ORDERS_CONNECTION_ERROR,
   WS_ORDERS_CONNECTION_CLOSED,
   WS_ORDERS_GET_MESSAGE,
-} from "../services/constants";
+} from "./constants/constants";
 import { TWSActions } from "../types/types";
 
 const wsUrl = "wss://norma.nomoreparties.space/orders/all";
